@@ -108,16 +108,39 @@ Line feed y los carriers return CRLF
 
 ### 10. Resto variables
 
+La premisa de go es el performance, es decir que se ocupe le menor cantidad de memoria posible.
 
  
 ### 11. Funciones
 
 
+
+
+
 ### 12. Condicionales
 
 
+	if os := runtime.GOOS; os == "Linux." {
+
+	} else {
+
+	}
+
+Comprimir.
+Para que el ejecutable pese lo menos posible.
+
 
 ### 13. Ejercicio 01
+
+1. Crear un paquete nuevo llamado 'ejercicios'
+2. Crear un archivo GO en ese paquete llamado 'ejercio01.go'
+3. Crear una funcion publica, que devuelva 2 valores (int y string)y que reciba de parametro un valor 'string'
+4. El parametro de tipo String recibido debera ser convertido a entero y si el entero es > a 100, el string retornado debe decir "Es mayor a 100" de lo contrario, devolver el mensaje "Es menor a 100".
+5. El valor numerico entero retornado debe corresponder al string convertido
+6. En main.go, llamar a dicha funcion asignandola a 2 variables y luego mostrar dichas variables por consola.
+7. Grabar, ejecutar y luego subir todo a Github.
+
+
 
 
 
