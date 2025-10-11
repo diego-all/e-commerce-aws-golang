@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"trin/ejercicios"
+	"trin/teclado"
 	"trin/variables"
 )
 
@@ -40,4 +41,6 @@ func main() {
 	numero, texto := ejercicios.ConvNumerico("50")
 	fmt.Println(numero)
 	fmt.Println(texto)
+
+	teclado.IngresosNumeros()
 }

@@ -141,10 +141,18 @@ Para que el ejecutable pese lo menos posible.
 7. Grabar, ejecutar y luego subir todo a Github.
 
 
-
-
-
 ## 14. Captura de datos por pantalla
+
+
+Los puede leer de muchas fuentes de datos, de archivos , de dispositivos tipo conectores de datos, lectores de codigo de barras, etc
+
+stdin: en cualquier sistema es el teclado.
+stdout: en cualquier sistema es la pantalla.
+
+	scanner := bufio.NewScanner(os.Stdin)
+
+
+
 
 
 ### 15. Iteraciones
