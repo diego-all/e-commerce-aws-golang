@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"runtime"
+	"trin/ejercicios"
 	"trin/variables"
 )
 
@@ -35,4 +36,8 @@ func main() {
 	default:
 		fmt.Printf("%s \n", os)
 	}
+
+	numero, texto := ejercicios.ConvNumerico("50")
+	fmt.Println(numero)
+	fmt.Println(texto)
 }
