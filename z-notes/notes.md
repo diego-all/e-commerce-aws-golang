@@ -161,6 +161,12 @@ stdout: en cualquier sistema es la pantalla.
 ### 16. Ejercicio 02
 
 
+1. Crear un archivo Go en el paquete ejercicios llamado ejercicio02.go
+2. Crear una funcion Publica, que pida por teclado un numero, valide si hay error o no (y si hay error que vuelva a pedirle).
+3. En base al numero recibido crear la tabla numerica del mismo. De 1 al 10 y la muestre por pantalla.
+4. En main, llamar a dicha funcion.
+5. Grabar, ejecutar y luego subir todo a Github.
+
 
 ### 17. Manejo de archivos
 

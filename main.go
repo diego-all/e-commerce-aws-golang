@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"trin/ejercicios"
-	"trin/teclado"
+	"trin/iteraciones"
 	"trin/variables"
 )
 
@@ -42,5 +42,14 @@ func main() {
 	fmt.Println(numero)
 	fmt.Println(texto)
 
-	teclado.IngresosNumeros()
+	// teclado.IngresosNumeros()
+
+	iteraciones.Iterar()
+
+	// iteraciones.Iterar2()
+
+	iteraciones.Iterar3()
+
+	ejercicios.TabladeMultiplicar()
+
 }
