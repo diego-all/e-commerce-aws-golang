@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"trin/ejercicios"
-	"trin/files"
+	"trin/funciones"
 	"trin/iteraciones"
 	"trin/variables"
 )
@@ -59,6 +59,9 @@ func main() {
 
 	// files.SumaTabla()
 
-	files.LeoArchivo()
+	// files.LeoArchivo()
 
+	// funciones.Calculos()
+
+	funciones.LlamarClosure()
 }

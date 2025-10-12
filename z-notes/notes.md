@@ -174,6 +174,67 @@ stdout: en cualquier sistema es la pantalla.
 
 ### 18. Funciones anonimas y Closures
 
+No es un tema muy digerible, no es un tema muy facil a veces cuesta buscar un caso de uso.
+
+
+Las funciones se pueden asignar a una variable, pasar por parametro, se pueden devolver por parametro. En node.js tambien se trabaja con funciones anonimas y son muy utiles, por que no necesito ir creando funciones dentro del codigo por que de esa manera estaria perdiendo el scope de muchas variables y de mucha informacion.
+
+**Funciones anonimas**: una funcion que noo tiene un nombre y que puede ser asignada tanto a una variable, como pasarse por parametro, 
+
+    func Calculos() {
+
+        var numero3 int = 32
+        var numero4 int = 243
+
+        suma := func(numero1 int, numero2 int) int {
+            return numero1 + numero2 + numero3 + numero4
+        }
+
+        fmt.Println(suma(10, 25))
+
+    }
+
+Todo es debido al scope, ya que numero3 y numero4 estan en la misma funcion calculos. Se crearon para tener un codigo mucho mas acotado, 
+
+En el otro ejemplo se ve como una sobrecarga de metodos que se veia en otros lenguajes, aunque la sobrecarga de funciones lo que hacia y lo que permitia es que cambiar la cantidad y los tipos de parametros recibidos.
+
+**En este caso no, se esta reinventando el calculo** 
+
+    func Calculos() {
+
+        var numero3 int = 32
+        var numero4 int = 243
+
+        calculo := func(numero1 int, numero2 int) int {
+            return numero1 + numero2 + numero3 + numero4
+        }
+
+        fmt.Println(calculo(10, 25))
+
+        calculo = func(numero1 int, numero2 int) int {
+            return numero1 * numero2 * numero3
+        }
+
+        fmt.Println(calculo(10, 25))
+    }
+
+Todo esto que hubiera costado hacer 2 funciones por afuera, se hace en una misma funcion, utilizando funciones anonimas.
+
+Tambien se podria devolver una funcion, esto es factible, se puede hacer que Calculos() devuelva una funcion, y donde se este llamando a Calculos() la variable la cual se asigna va a ser creada como una funcion anonima y se va a poder interactuar y darle toda una logica, 
+
+    func Calculos() func(int, int) int {
+        ...
+    }
+
+**Closure:** Al aprecer es una funcion que retorna otra funcion.
+
+¿Cual es la ventaja del Closure?
+El tema del ofuscamiento del codigo.     ?????
+
+Tanto numero como secuencia lo va a inicializar la priemra vez y luego va a quedar oculto. 
+
+
+
 
 
 ### 19. Recursión
