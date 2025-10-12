@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"trin/ejercicios"
+	"trin/files"
 	"trin/iteraciones"
 	"trin/variables"
 )
@@ -50,6 +51,14 @@ func main() {
 
 	iteraciones.Iterar3()
 
-	ejercicios.TabladeMultiplicar()
+	// ejercicios.TabladeMultiplicar()
+
+	// fmt.Println(ejercicios.TabladeMultiplicar())
+
+	// files.GrabaTabla()
+
+	// files.SumaTabla()
+
+	files.LeoArchivo()
 
 }
