@@ -233,8 +233,7 @@ El tema del ofuscamiento del codigo.     ?????
 
 Tanto numero como secuencia lo va a inicializar la priemra vez y luego va a quedar oculto. 
 
-
-
+> "Segun Pablo, hay casos de uso para emplear un closure, a lo largo de su vida profesional no tuvo la necesidad de usar esto, pero a veces se tiene una caja de herramientas llena de herramientas y no siempre se usa todo, pero es importante saber que se dispone de esto, por que van a existir determinados casos de uso donde se debe jugar con esto."
 
 
 ### 19. Recursión
@@ -275,34 +274,96 @@ Tanto numero como secuencia lo va a inicializar la priemra vez y luego va a qued
 ### 28. Middlewares
 
 
-## Sección: Backend - Inicio de Desarrollo
+## Sección 3 : Backend - Inicio de Desarrollo
+
+
+### 29. Inicio de Backend
+
+Cuenta en AWS:
+
+- RDS:
+- EC2 (Security group para la base de datos)
+- Cognito: Manejar el login y la seguridad de usuarios.
+- Secret Manager: Alojar las credenciales de la base de datos.
+- IAM: Perfiles, Roles.
+- Lambdas: Como configurar, como subir o compilar.
+- API Gateway: Se le va añadir una capa de API Gateway a las lambdas. Hara que las lambdas sean publicas y van a  recibir peticiones, como cualquier API normal
+- Bucket S3: Para subir las imagenes, la del producto y la del avatar.
+- Tecnica de API Gateway directo a S3.
+
+- Desarrollar una API de tipo REST que va a ser un trigger de cognito cuando el usuario confirma su email va a disparar una API de lambda que va a ejecutar el reigstro en una base de datos. 
+
+- Luego la API HTTP normal que es el desarrollo de todo el backend.
+
+**Objetivo:** No es aprender a hacer un backend, sino aprender todos estos servicios de AWS mencionados y perfeccionar el desarrollo en lenguaje Go.
+
+
+### 30. Creando la cuenta de AWS
+
+Creada en Marzo de 2025
+
+    dposadallanoe@gmail.com
+    Vv0
 
 
 
-### 29.
+### 31. Recorrido por Billing
+
+Tilotta paga en promedio 42 a 50 USD.
+
+Base de datos Aurora que se tiene en modalidad serverless 2. (Tiene un costo bastante elevado para ser una base de datos es lo que se utiliza)
+
+RDS es el mas costoso  46,90 USD
+
+2 secretos en secret manager 0,80 USD.
+
+API gateway no tiene costo por que tiene una free tier de miles de peticiones.
+
+CloudWAtch (Se tienen 10 alarmas para crear metricas)
+
+Cognito (5 user pools gratuitos)
+
+Lambdas se tienen 400 k segundos en la free tier. 
 
 
-### 30.
+**AWS orientado a Datos**
 
+https://www.udemy.com/course/aws-orientado-a-datos/?couponCode=PLOYALTY0923
 
-### 31.
+Slack y Discord
 
-
-### 32.
-
-
-### 33.
-
-
-### 34.
+**Norte de Virginia es el datacenter que tinee mayor seguridad y mayor observabilidad.**
 
 
 
-### 35.
+
+
+### 32. Descarga e instalacion de Postman
+
+
+## Seccion 5: Backend - Cognito
+
+
+### 33. Primeros pasos con cognito
+
+
+### 34. Instalador de Gambit.exe
 
 
 
-### 36.
+### 35. Creando nuestro grupo de usuarios y configurandolo
+
+
+
+### 36. Probando la aplicacion de Login y obteniendo el JWT
+
+
+
+- Tomar el diagrama que tengo con  chart.js y sacar un listado de temas o configuraciones.
+
+- chart.js
+
+- 
 
 
 
