@@ -63,5 +63,8 @@ func main() {
 
 	// funciones.Calculos()
 
-	funciones.LlamarClosure()
+	// funciones.LlamarClosure()
+
+	funciones.Exponencia(2)
+
 }

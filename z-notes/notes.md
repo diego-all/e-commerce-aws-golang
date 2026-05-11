@@ -239,6 +239,18 @@ Tanto numero como secuencia lo va a inicializar la priemra vez y luego va a qued
 ### 19. Recursión
 
 
+La recursion es una funcion que se llama a si misma n veces. Se vaa exponer como publica para que pueda ser llamada desde main 
+
+
+Lo primero que debemos contruir cuando trabajamos con recursion es la salida de la recursion, para que no se nos quede colgada la funcion,
+
+
+
+
+
+
+
+
 
 ### 20. Array & Slices 
 
