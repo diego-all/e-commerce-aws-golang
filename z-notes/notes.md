@@ -242,7 +242,10 @@ Tanto numero como secuencia lo va a inicializar la priemra vez y luego va a qued
 La recursion es una funcion que se llama a si misma n veces. Se vaa exponer como publica para que pueda ser llamada desde main 
 
 
-Lo primero que debemos contruir cuando trabajamos con recursion es la salida de la recursion, para que no se nos quede colgada la funcion,
+Lo primero que debemos contruir cuando trabajamos con recursion es la salida de la recursion, para que no se nos quede colgada la funcion, 
+
+
+
 
 
 
@@ -315,7 +318,8 @@ Cuenta en AWS:
 Creada en Marzo de 2025
 
     dposadallanoe@gmail.com
-    Vv0
+    Vv0!!
+    b0ld
 
 
 
@@ -359,7 +363,123 @@ Slack y Discord
 ### 33. Primeros pasos con cognito
 
 
+Esta la base de seguridad del login de usuarios. Lo que no quita que no vayamos a tener en una base de datos una tabla de usuarios, que la vamos a tener que ir de alguna manera indirectamente sincronizando con cognito. Cada vez que un usuario se registre, 
+
+Luego vamos a desarrollar una lambda que va a capturar los datos, cuando el usuario ya ha veirifcado su mail, cognito, va a disparar un trigger hacia una lambda que nos va a enviar los datos que ese usuario, mediante el token y demas.
+
+Y nosotros vamos a registrar a ese usuario en nuestra base de datos. Luego vamos a tener endpoints de modificacion de datos del usuario, que eso va a interactuar directamente el front con el backend a nivel API para modificar los datos usuario, para borrar un usuario, para listar usuarios, y pra traer los datos de un usuario determinado. Pero todo nace en cognito, 
+
+
+En la siguiente clase se va a crear el grupo de usuarios para gambit.
+
+- Crear grupo de usuarios
+
+EN principio se tiene un ID de grupo de usuarios
+
+us-east-1_jdfksdjfksdf
+
+- ARN: Se configura en la aplicacion para poder acceder a ese grupo de usuarios.
+
+- Estado de la confirmacion
+
+En cada mail que envia amazon hay un link, que permite hacerle click y uno termina confirmando la identidad.
+
+Una vez que el usuario esta confirmado con su identidad para Amazon, ese usuario esta en estado de habilitado y confirmado.
+
+Nosotros para nuestro ecommerce vamos a tomar como validos los usuarios que ya estan confirmados.
+
+Que figuren aqui no significa que vyamos a hacer nada con ellos, simplemente es un registo. 
+Es como si fuera base de datos de usuario que la va manteniendo Amazon, pero nosotros vamos a tener nuestra propia base de datos de usuario.
+
+Pero hay empresas que con tener estos datos aqui les basta. No tienen por que crear una base de datos, ni tabla de usuarios, sino que lo manejan directamente desde Amazon y desde aqui tienen todo.
+
+Tambien tengo la posibilidad e importar usuarios si tengo un CSV con los datos de un usuario.
+
+- Grupos
+- Experiencia de inicio de sesion: se configura cual es el dato principal para iniciar sesion.
+- Identidades federadas: son las identidades externas como Facebook, Google, Amazon, Apple.
+
+A veces uno va a un sistema y me permite Loggearme con mis credenciales de Google o con mi Perfil de Facebook. eso tambien se le puede añadir a nuestro grupo de usuarios y cuando desarrollemos el login, vamos a poder introducir esto.
+
+Ademas cognito cuando uno se loggea devuelve una serie de datos entre los cuales esta el Access token que esta en un formato como nosotros lo conocemos  como JSON Web Token.
+En amazon cognito se llama Access Token, y ese token es el que nosotros vamos a utilizar para enviar a la API y para obtener la validacion de cognito.
+
+Cuando se desarrollen las APIS, van a ver cuando se configure **la API Gateway,** que vasn a tener la posibilidad de decirle que esa peticion va a tener que estar autenticada con cognito.
+Y aca es donde nosotros vamos a enviar en el header como cualquier API, el token authorization como 
+
+
+Este token tiene una expiracion,
+
+Como es mucho el trabajo que vamos a tener que ir haciendo, no tenia sentido meterle en el medio identidades federadas y ademas 
+
+
+- Experiencia de inscripcion: Aqui lo que se tiene es la verificacion y confirmacion asistida por cognito. Permitir que congnito envie automaticamente mensajes para verificar y confirmar.
+
+**Esta habilitado** Obviamente por que vamos a querer que nos envie un mensaje de habilicion y confirmacion de mail, y los atributos pendientes de verificacion, 
+
+Enviar un mensaje de correo electronico o verificar la direccion de correo electronico.
+
+- Atributos obligatorios : email
+
+- Atributos personalizados: Es como si estuvieran diseñando una tabla de base de datos, 
+
+- Registro automatico, 
+
+- Mensajeria: default (cognito)
+
+- Region (SES): Simple email service.
+
+- Direccion de correo electronico del remitente.
+
+- SMS: Tiene costo elevado
+
+- PLantillas de mensajes
+
+Integracion de aplicaciones
+
+Es importante nos indica cual es el dominio para cuando queramos interactuar con cognito desde la aplicacion cliente.
+
+- Srvidores de recursos: Autenticacion OAuth 2.0
+
+- Personalizacion de la interfaz de usuario alojada. ( CSS Personalizado)
+Se puede configurar un logo, un CSS personalizado. Cognito nos da una aplicacion para Loggear.
+En caso de que no se desee desarrollador un frontend.
+Cognito nos da una aplicacion para que nosotros hagamos lo que necesitamos.
+
+
+
+- Clientes para aplicaciones y analisis.
+
+Id de cliente
+Flujos de autenticacion
+ALLOW_CUSTOM_AUTH
+ALLOW_REFRESH_TOKEN_AUTH
+ALLOW_USER_SRP_AUTH
+
+
+- Permisos de lectura y escritura de atributos
+
+Si nosotros vamos a hacer que nuestra base de usuarios trabaje directamente con cognito.
+
+
+
+
 ### 34. Instalador de Gambit.exe
+
+  Private Sub txtToken_TextChanged(sender As Object, e As EventArgs) Handles txtToken.TextChanged
+        Dim t, tf As String
+        Dim desde, hasta As Integer
+        t = txtToken.Text
+        desde = InStr(1, t, "access_token=")
+        hasta = InStr(desde, t, "&token_type=") - 13
+        tf = t.Substring(desde + 12, hasta - desde)
+        Clipboard.SetText(tf)
+        MessageBox.Show(tf)
+ 
+ End Sub
+
+
+
 
 
 
