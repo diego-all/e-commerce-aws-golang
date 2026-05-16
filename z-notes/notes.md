@@ -562,23 +562,80 @@ Evitar errores de aexistencia de usuarios = true
 
 - Ambitos de Open ID Connect = OpenID y Correo electronico
 
-
+s
 
 ### 36. Probando la aplicacion de Login y obteniendo el JWT
 
 
+Ya se tiene un grupo de usuarios, vamos a probar la aplicacion y a hacer un registro.
+
+
+En amazon Cognito
+
+Grupo de usuarios actual
+    Clientes de Aplicacion    ==>  Ver pagina de inicio de sesion.
+
+    Hacemos click en sign up
+
+Se diligencia con un correo y contraseña.
+
+
+Se recibe a la carpeta de spam del correo com asunto: Verify your new account
+no-reply@verificationemail.com
+The verification code to your new account is 248350
+
+Y envian un verification code
+y me lleva a: https://localhost:3000/?code=27a0fe50-09c1-4082-985b-5900ecc28c12
+
+Se confirma la cuenta y ya ha creado el usuario.
+
+    This site can’t provide a secure connection
+    localhost sent an invalid response.
+    ERR_SSL_PROTOCOL_ERROR
+
+
+Este error es muy comun por que no se tiene ninguna aplicacion puesta en localhost:3000
+
+?code=27a0fe50-09c1-4082-985b-5900ecc28c12 Este codigo es el codigo de mi usuario de la aplicacion.
+
+Que es lo que nos estaba pasando automaticamente cuando ibamos a la aplicacion?
+Como todavia el token estaba vigente, nos mostraba simplemente el ID del usuario, el nombre del usuario.
+
+Como se soluciona, como hago yo para obtener el token?
+
+Beuno, tenemos que venir a editar el valor de out aqui, ene ste lugar donde dice tipos, 
 
 
 
 
+- Editar páginas de inicio de sesión administradas
+
+Aca donde dice: Tipos de concesión de OAuth 2.0
+
+Nosotros teniamos configurado la concesión de código de autorización.
+
+Vamos a tener que seleccionar concesión implicita : POr que de esta manera se esta indicando que yo necesito obtener un token de acceso. Sino, no me lo permite por el resutlado.
+
+Vamos a la aplicacion, y ahora me va a aparecer el token:
+
+    https://summer-app-dev-unique.auth.us-east-1.amazoncognito.com/login?client_id=2lorekrb6p8a0cue50im377msk&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Flocalhost%3A3000
 
 
+POr que todavia estoy dentro de la hora de token , cuando el token expire hay si me va a pedir nuevamente el usuario y contraseña para loggearme.
+
+en este caso detecta que por la cookie que yo tengo grabada, mi token todavia no está expirado y simplemente me lo está mostrando. Bueno, yo les di una aplicacion paara que los usarios de Windows y deje el codigo necesario para los que no usan windows puedan hacer un  pequeño script.
 
 
 
 ## Sección 6: Backend - RDS
 
+Vamos a tener quecrear una base de datops de mySQL
 
+Lo que importa es clusters de base de datos.
+
+Instancias reservadas: Pago por adelantado
+
+Instantaneas (Bakups o snapshots)
 
 
 
