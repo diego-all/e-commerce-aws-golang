@@ -705,7 +705,121 @@ Eventos
 Suscripciones a eventos
 
 
-### 38.  
+### 38. Creando nuestra base de datos (MySQl)
+
+Crear base de datos
+
+    Aurora (MySQl Compatible) No tiene una free tier
+    MySQL (SELECCIONAR ESTE)
+
+No habilitar el multi AZ
+
+Plantillas: capa gratuita
+
+Identificador de instancias: summer
+
+nombre de usuario maestro: root
+
+contraseña maestra: summer
+
+configuracion de la instancia:db.t3.micro o db.t2.micro
+
+SDD de uso general (gp2)
+
+almacenamiento asignado: 20 GiB
+
+Habilitar escalado automaticao de almacenamiento = False
+
+Conectividad 
+
+No se conecte a un recurso informatico EC2 = True
+
+Tipo de red : IPv4
+
+VPC: Default
+
+Grupo de subredes de al base de datos: Default
+
+Acceso publico = True
+
+Nota: Se colocará publica para que pueda ser accedida por fuera de la VPC.
+Desde la VPC van a poder acceder a la base de datos.
+Inclusive las lambdas van a poder acceder a la base de datos sin tener que pasar por una VPC.
+Mas que por la VPC default y por las subredes default.
+
+Grupo de seguridad: Elegir existente (Default)
+
+Zona de disponibilidad:  Sin preferencia
+
+Proxy de RDS : deshabilitado
+
+Entidad de certificacion: (predeterminado)
+
+Autenticacion de bases de datos:
+
+Autenticacion con contraseña = Yes
+
+Configuracion adicional
+
+Opciones de base de datos
+
+Nombre de la base de datos inicial = summer
+
+Grupo de parametros = Default
+
+Grupo de opciones = Default
+
+Copia de seguridad
+
+Habilitar las copias de seguridad automatizadas = True
+
+Periodo de retencion de copia de seguridad: 7 dias 
+
+Periodo de copia de seguridad = Sin preferencia
+
+Copiar las etiquetas  en las instantaneas = True
+
+
+Replicacion de copias de seguridad
+
+Habilitar la replicacion en otra region de AWS = False
+
+Exportaciones de registros = False
+
+> Nota:Seleccionar los tipos de registros que desee publicar en Amazon CloudWatch Logs
+Logs de auditoria
+Registro de errores
+Log general
+Log de consulta lentas
+
+
+Mantenimiento 
+
+habilitar actualizacion automatica de versiones secundarias = False
+
+Periodo de mantenimiento = sin preferencia
+
+Proteccion contra la eliminacion = False
+
+
+
+
+### 39.
+
+
+### 40.
+
+
+### 41.
+
+
+
+### 42.
+
+
+
+### 43.
+
 
 
 ## Sección 7: Backend - Secret Manager
