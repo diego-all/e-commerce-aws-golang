@@ -629,18 +629,83 @@ en este caso detecta que por la cookie que yo tengo grabada, mi token todavia no
 
 ## Sección 6: Backend - RDS
 
+### 37. Introduccion a AWS RDS
+
 Vamos a tener quecrear una base de datops de mySQL
 
-Lo que importa es clusters de base de datos.
+Lo que importa es **clusters de base de datos.**
 
-Instancias reservadas: Pago por adelantado
+- Instancias reservadas: Pago por adelantado
 
-Instantaneas (Bakups o snapshots)
+- Instantaneas (Backups o snapshots, son las imagenes de nuestra base de datos)
+Vamos a tener que configurar una cantidad de dias de retenciones
+Amazon automaticamente aunque no lo queremos va a hacer un snapshot diario minimo a la base de datos para tener una copia de seguridad por si pasa algo.
+
+- Eventos recientes: son los eventos que han ocurrido en la base de datos, si hubo alguna falla, si hubo algun cambio y nosotros tenemos despues suscripciones, eventos que nosotros podemos decirle que ante un evento dispare un mensaje hacia un servicio que es el **SNS**, el Simple Notification System o services que me permite en base a los mensajes que recibe luego en un esquema de topicos y suscriptores, añadirle los sucriptores que yo quiera.
+SI yo quiero que ese mensaje me llegue por mail, agregaré un suscription de mail y si quiero que me envie un mensaje via HTTP o a un WebHook por ejemplo.
+
+Yo lo uso habitualmente para enviar mensajes a canales de Slack a nivel de empresa para enterarnos de que hubo eventos, por ejemplo el evento de Fail Over o cuandouna base tiene una falla y me entero inmediatamente cuando se dispara ese evento.
+
+- Luego cada base de acuerdo al motor va a tener un grupo de parametros y un grupo de opciones. 
+La diferencia es que las opciones van a instancias yu los parametros van a clusters.
+
+Un cluster puede tener n instancias de base de datos en su interior.
+
+NO se va a profundizar mucho en esto por que para esto hay un curso que es **Amazon orientado a datos**, donde ahi explico detalladamente cada una de estas opciones.
+
+- Grupo de subredes: Es por donde va a estar conectada nuestra base de datos.
+
+- Plataformas compatibles (VPC): tiene que ver con la conectividad hacia la base de datos.
 
 
+Aurora serverless version 2 y tiene un costo elevado.
+
+**Amazon RDS**
+
+Panel
+
+Bases de datos
+
+Editar de consultas
+
+Información sobre rendimiento
+
+Instantaneas: (Publica)
+
+    privilege-escalation-1760880625
+    privilege-escalation-1760880642
+    db-employees
+    nimbus-assistant-test-vulnerable-db
+    wildllama-prod
+    wordpressdb
+    
+
+Exportaciones en Amazon S3: Si hemos hecho una exportacion de S3 a una snapshoot lo que hace es grabar en formato abierto, me graba una carpeta por cada base por cada tabla,y dentro tenemos la informacion en formato parquet. Es un formato especial para grabar datos en s3, y pueden ser leidos con un lenguaje parecido al SQL. El alojamiento en S3, es el mas aconomico que hay (Datos de uso poco frecuente, data de log, data historica), A su vez existe Glacier, que es alojamiento en frio total, donde ya los datos pasan a alojamiento en cinta. Por eso es tan economico, pero lo que es muy costoso es acceder luego a la información.
+
+Es cuando nosotros por motivos legales, tenemos que alojar y guardar informacion por muchos años, pero que nunca o casi nunca la vamos a acceder, estamos obligados a guardarla, pero no vamos a acceder a esa informacion. (Glacier es el alojamiento mas economico que existe, para vartios teras y teras de datos.)
+
+Copia de Seguridad automatizadas
+
+Instancias reservadas
+
+Proxies
 
 
+Grupo de subredes
 
+Grupo de parametros
+
+Grupos de opciones
+
+Versiones de Motor personalizadas
+
+
+Eventos
+
+Suscripciones a eventos
+
+
+### 38.  
 
 
 ## Sección 7: Backend - Secret Manager
