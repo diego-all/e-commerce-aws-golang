@@ -481,13 +481,220 @@ Si nosotros vamos a hacer que nuestra base de usuarios trabaje directamente con 
 
 
 
-
-
 ### 35. Creando nuestro grupo de usuarios y configurandolo
+
+Vamos a crear nuestro grupo de usuarios.
+
+hacerlo con identidades federadas.
+
+Opciones de inicio de sesion = correo electronico
+
+Politica de contraseñas: 8 caracteres
+
+Autenticacion multifactor = sin MFA
+
+recuperacion automatica de cuentas = Habilitar la recuperacion automatica de cuentas
+
+metodo de entrega de los mensajes de recuperacion de cuentas de usuario = solo correo electronnico
+
+Registro automatico = habilitar el registor automatico
+
+Verifricacion y confirmacion asistidas por Cognito = permitir que cognito envie automaticamente mensajes para verificar y confirmar - Recomendado.
+
+Enviar mensaje de correo electronico, verificar la direccion de correo electronico
+
+- Verificacion de los cambios de atributo
+
+Mantener el valor del atributo original activo cuando hay una actualizacion pendiente - recomendado
+
+Direccion de correo electronico
+
+Atributo obligatorio = email
+
+Configuar el envio de mensajes = Enviar correo elctronico con cognito
+
+
+Integracion de la aplicacion  
+
+- Nombre del grupo de usuarios = summer
+
+- Paginas de autenticacion alojadas = Usarla interfaz de usuario alojada de Cognito
+
+- Dominio 
+
+INTERESANTE PROAR EL DOMINIO PERSONALIZADO
+
+- Utilizar un dominio de Cognito = https://summer
+
+- Cliente de aplicacion inicial = Cliente publico
+
+- Nombre del cliente de la aplicacion = summer
+
+
+Secreto de cliente = No generar secreto de cliente ( No justifica ya que tiene un costo adicional en secret manager)
+
+- URL de devolucion de llamadas permitidas = https://localhost:3000
+
+
+- Configuracion avanzada del cliente y la aplicacion
+
+Seleccionar flujos de autenticacion
+
+ALLOW_USER_SRP_AUTH
+ALLOW_CUSTOM_AUTH
+ALLOW_USER_SRP_AUTH
+
+Duracion de la sesion del flujo de autenticacion = 3 minutos
+
+Vencimiento del token de actualizacion = 30 dias
+
+Vencimiento del token de acceso = 1 dia
+
+Vencimiento del token id = 1 dia
+
+
+Habilitar revocacion de token = true
+
+Evitar errores de aexistencia de usuarios = true
+
+- Proveedores de identidad = grupo de usuarios de cognito
+
+
+- Ambitos de Open ID Connect = OpenID y Correo electronico
 
 
 
 ### 36. Probando la aplicacion de Login y obteniendo el JWT
+
+
+
+
+
+
+
+
+
+
+
+## Sección 6: Backend - RDS
+
+
+
+
+
+
+
+
+
+## Sección 7: Backend - Secret Manager
+
+
+## Sección 8: Backend - Lambda con Go para manejo de usuarios
+
+
+## Sección 9: APi Gateway directo a s3 para alojar imagenes
+
+
+## Sección 10: Backend - Lambda Principal
+
+
+## Sección 11: Backend - Categorias
+
+
+## Sección 12: Backend - Productos
+
+
+## Sección 13: Backend Usuarios
+
+
+
+## Sección 14: Backend - Address
+
+
+
+## Sección 15: Backend - Ordenes
+
+
+
+
+## Sección 16: Fin de Back Office
+
+
+
+## Sección 17: Configurando entorno - FRONTEND
+
+
+
+## Sección 18: Inicializando proyecto - FRONTEND
+
+
+
+
+## Sección 19: Sistema de autenticación - FRONTEND
+
+
+
+
+## Sección 20: Menu principal - FRONTEND
+
+
+
+
+
+## Sección 21: Panel de admin - FRONTEND
+
+
+
+## Sección 22: Ajustes del usuario - FRONTEND
+ 
+
+
+
+## Sección 23: Sistema de direcciones - FRONTEND
+
+
+
+## Sección 24: Home - FRONTEND
+
+
+
+## Sección 25: Buscar de productos - FRONTEND
+
+
+
+
+## Sección 26: Sistema de categorias - FRONTEND
+ 
+
+
+
+## Sección 27: Página de producto - FRONTEND
+
+
+
+
+## Sección 28: Sistema de carrito - FRONTEND
+
+
+
+## Sección 29: Mis pedidos - FRONTEND
+
+
+
+## Sección 30: Deploy - FRONTEND
+
+
+
+## Sección 31: Clase extra
+
+
+
+
+
+
+
+
+
 
 
 
@@ -496,19 +703,4 @@ Si nosotros vamos a hacer que nuestra base de usuarios trabaje directamente con 
 - chart.js
 
 - 
-
-
-
-
-
-### 37.
-
-
-
-
-
-
-
-
-
 
