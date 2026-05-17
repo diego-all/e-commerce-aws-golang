@@ -803,32 +803,89 @@ Proteccion contra la eliminacion = False
 
 
 
+### 39. Descargando e instalando Heidy SQL
+ 
 
-### 39.
-
-
-### 40.
-
-
-### 41.
+https://www.heidisql.com/
 
 
-
-### 42.
+### 40. Nos conectamos a la base de datos y mddificamos el security group
 
 
 
-### 43.
+### 41. Descargar gambit.sql
 
+
+
+### 42. Instalando Gambit.sql
+
+Son los archivos DDL para la base de datos.
+ALT + X en DBeaver.
 
 
 ## Sección 7: Backend - Secret Manager
+
+### 43. Introduccion a secret manager
+
+
+
+### 44. Creación de un secreto que tenga las credenciales de la base.
+
 
 
 ## Sección 8: Backend - Lambda con Go para manejo de usuarios
 
 
-## Sección 9: APi Gateway directo a s3 para alojar imagenes
+### 45. Introducción a Lambdas y caracteristicas para el desarrollo en Go.
+
+
+
+### 46. Creación de Lambda y modificacion del rol IAM
+
+
+### 47. Creación del proyecto en Github y clonación en PC Local
+
+
+### 48. Iniciando el desarrollo en GO
+
+
+### 49. Desarrollo de paquete AWSGO
+
+### 50. Desarrollo de paquete Models
+
+
+### 51. Desarrollo de paquete Secret Manager
+
+
+### 52. Desarrollo de paquete Tools & Completamos BD
+
+
+
+### 53. Compilamos nuestra Lambda y la subimos a AWS
+
+
+### 54. Configurar Trigger de Cognito como disparador de la Lambda
+
+
+
+### 55. Probamos la solución completa
+
+
+
+## Sección 9: API Gateway directo a s3 para alojar imagenes
+
+
+###
+
+###
+
+###
+
+
+###
+
+
+###
 
 
 ## Sección 10: Backend - Lambda Principal

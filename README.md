@@ -38,5 +38,7 @@ Y luego ejecutas: cdk deploy -a "python3 rds_mysql.py"
     cdk deploy -a "python3 cognito4.py" -o cdk_cognito.out
 
     # Para trabajar con tu nueva RDS de MySQL:
-    cdk synth -a "python3 rds_mysql.py" -o cdk_rds.out
-    cdk deploy -a "python3 rds_mysql.py" -o cdk_rds.out
+    cdk synth -a "python3 rds_mysql.py" -o cdk_rds.out --profile bold-free-tier
+    cdk deploy -a "python3 rds_mysql.py" -o cdk_rds.out --profile bold-free-tier
+
+    
