@@ -825,7 +825,21 @@ ALT + X en DBeaver.
 
 ## Sección 7: Backend - Secret Manager
 
+colocar en favoritos
+
 ### 43. Introduccion a secret manager
+
+
+Permite rotar, administrar y recuperar secretos de forma sencilla durante sus ciclos de vida.
+
+Por que habla de rotar? por que los secretos que nosotros grabemos, esas passwords. Hay una funcionalidad que podemos decirle a Amazon de que esa password la vaya regenerando a un periodo determinado. Si nuestra aplicacion se conecta a secrets para recuperar la password, es una combinacion perfecta, si alguien tiene que administrar la base de datos en forma manual, irá a seguir secret manager capturara el valor actual de la password de root y se conectara con Heidy SQL a la base.
+
+$ 0.40 por secreto al mes
+$ 0.05 por 10000 llamadas a la API
+
+Cuando se crea un secreto, la forma de acceder a ese secreto es pegarle a una API interna que tiene pasandole los parametros y nos devuelve el secreto. Lo hacer de manera muy rapida, es realmente rapidisimo, no le genera un delay a la aplicacion.
+
+Es fundamental esto por que si aqui hubiera un delay enj aplicacion de alto rendmiento seria un cuello de botella.
 
 
 
