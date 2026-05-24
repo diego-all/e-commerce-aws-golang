@@ -846,6 +846,17 @@ Es fundamental esto por que si aqui hubiera un delay enj aplicacion de alto rend
 ### 44. Creación de un secreto que tenga las credenciales de la base.
 
 
+- Amazon RDS
+- Document DB: Similar a MongoDB.
+- RedShift
+- Credenciales para otra base de datos
+- Otro tipo de secreto
+
+Funcion de rotacion de lambda
+
+Desarrollar la lambda 1que va a terminar trabajando con cognito como triger 
+y que va a grabar el registro de usuario en la base de datos.
+
 
 ## Sección 8: Backend - Lambda con Go para manejo de usuarios
 
