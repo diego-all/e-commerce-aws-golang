@@ -858,10 +858,80 @@ Desarrollar la lambda 1que va a terminar trabajando con cognito como triger
 y que va a grabar el registro de usuario en la base de datos.
 
 
+
+
 ## Sección 8: Backend - Lambda con Go para manejo de usuarios
 
 
 ### 45. Introducción a Lambdas y caracteristicas para el desarrollo en Go.
+
+
+Las lambdas son en definitiva codigo o funciones que podemos ejecutar.
+
+AWS Lambda
+Ejecute código sin administrar servidores.
+
+
+Funciones que se corren sin servidor, Lo que nos permite amazon es desarrollar y no preocuparnos por que hardware corre debajo, y ese es el servicio de lambdas.
+Podemos hacer aplicaciones, APis REST, muchas cosas desde lambda sin estar preocupados por que servidor, cuanta memoria, que velocidad de red, como vamos a hacer para manejar la concurrencia, todo eso lo maneja lambda sin ningun tipo de problema.
+
+Nos permite desarrollar en distintos lenguajes, podemos crear desde 0 o utilizar un proyecto que ya tiene de muestra amazon de distintos tipos de desarrollo,  en distintos tipos deLenguaje, o usar una imagen del contenedor de lo que tiene que ver con Dokcer y Kubernetes.
+
+
+**La nueva estrategia de AWS (Segunda y tercera imagen): Al darse cuenta de esto, AWS decidió que no tenía sentido mantener un entorno exclusivo llamado "Go". En su lugar, introdujeron los entornos "Amazon Linux" (Custom Runtimes). Estos entornos son sistemas operativos limpios diseñados para ejecutar cualquier binario nativo que tú subas (ya sea programado en Go, Rust, C++, etc.).**
+
+
+Amazon Linux 2023 (o en su defecto Amazon Linux 2, aunque la 2023 es la más reciente y recomendada).
+
+Nota: Internamente, AWS identifica a este entorno con el identificador provided.al2023.
+
+Arquitectura: Puedes seleccionar x86_64 o arm64 (esta última aprovecha los procesadores Graviton de AWS, que son más económicos y rápidos para Go).
+
+
+Una de las cosas que se deben saber es que Go es uno de los pocos lenguajes que maneja lambda de modo compilada, que significa que nosotros vamos a tener que compilar nuestra solucion dentro del exe va a estar todo lo necesario, todas las dependencias que vamos a necesitar para que corran, por que imageinese que nosotros utilizamos paquetes que si no tenemos forma de decirle a la lambda que ese codigo queestamos implementando utiliza un paquete externo como el SDK de Amazon u otros paquetes externos como el manejo de base de datos, no va a saber que hacer Amazon, entonces Go es compilado, mientras que Python, node.js y otros lenguajes son interpretados. 
+
+Significa que vamos en esos lenguajes se sube el codigo asi crudo como esta, y luego hay otra parte de las lambdas que son las capas.
+
+Las capas es loq ue se usa por ejemplo en python para subir las librerias de dependencias, 
+No va a ser nuestro caso, no nos vamos a tener que preocupar por las capas por que repito, Go va a ser un lenguaje cmpilado, internamente en su exe va a tener todo lo necesario para funcionar. 
+
+Arquitectura x_86_64 
+
+Permisos
+
+Rol de ejecucion
+
+Tenemos la posibilidad de crear roles, por que la lambda tiene que ejecutar, tiene que funcionar, con un rol determinado, o tenemos un rol creado y lo asignamos o permitimos que la lambda cree un rol.
+
+
+
+Configuracion avanzada
+
+En caso de tener una base privada
+
+- Habilitar la firma de codigo
+- Habilitar URL de la funcion
+- Habilitar etiquetas
+- Habilitar VPC
+
+En caso de tner una base privada, no publica, puedo decirle que se va a conectar a traves de la VPC.( se habilitara y se usara la VPC DEfault para conectarme a la bvase de datos, 
+
+
+Son las 6 sub redes para conectarme a mi base de datos, 
+
+Seleccionar security group por default.
+
+Avanzar con el registro de usuarios.
+
+
+
+
+
+
+
+
+
+
 
 
 
