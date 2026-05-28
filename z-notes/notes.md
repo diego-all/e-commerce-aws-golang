@@ -924,18 +924,73 @@ Seleccionar security group por default.
 Avanzar con el registro de usuarios.
 
 
-
-
-
-
-
-
-
-
-
-
-
 ### 46. Creación de Lambda y modificacion del rol IAM
+
+Crear la funcion lambda que vamos a usar como Trigger de cognito cuando un usuario confirma su mail.
+Esa lambda va a recibir esos datos y los va a registrar en la base de datos como un insert en la tabla de un usuario nuevo.
+
+Vamos a hacer click en crear una funcion, se va a llamar SummerUser se le v a indicar que es de tipo Go, es decir Amazon Linux 2.
+
+
+Arquitectura x_86_64 
+
+
+Rol de ejecucion: creacion de un nuevo rol con permisos basicos de lambda.
+
+Luego lo vamos a modificar vamos a ver como modificarlo.
+
+Y la configuracion avanzada se deja como esta.
+
+habilitar firma de codigo = No
+Habilitar URL de la funcion = No
+Habilitar etiquetas = No
+Habilitar VPC = No
+
+Por que no hace falta crear una VPC para coenctarse a la base de datos.
+Vamos a crear la funcion y aqui se esta creando y cuando aparece en verde ya tenemos nuestra lambda.
+
+Por ahora no tiene nada, no se tiene ni siquiera un codigo para subirle.
+
+Controlador: La funcion de entrada de nuestro desarrollo.  (main)
+
+Recordar que la funcion de entrada de cualquier aplicacion de Go es main 
+
+
+Luego no hay que añadirle capas, 
+
+
+Ahora en la aprted e configuracion. 
+
+
+Monitorear: Las metricas de CLoudWatch
+
+Editar la configuracion básica: 
+
+Memoria: 128 MB
+
+Almacenamiento efimero: 512 MB
+
+Igualmente hay toda una capa gratuita que no la vamos a llegar a consumir.
+
+Tiempo de espera = 15 mins
+
+Uso de rol existente: ej: service-role/summerUser-role-qt60vmww
+
+
+**Desencadenador, mas adelante cuando ya se tenga la lambda desarrollada** 
+
+Se tiene un permiso de Amazon CloudWatch Logs
+
+Destino : No hay destino, eso es si tenemos una cadena de lambdas, se tiene una lambda que termina y le pasa a la otra lambda.
+
+
+URL de funcion: se va a usar cuando se tenga la lambnda principal.
+
+
+
+
+
+
 
 
 ### 47. Creación del proyecto en Github y clonación en PC Local
