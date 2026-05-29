@@ -974,7 +974,7 @@ Igualmente hay toda una capa gratuita que no la vamos a llegar a consumir.
 
 Tiempo de espera = 15 mins
 
-Uso de rol existente: ej: service-role/summerUser-role-qt60vmww
+Uso de rol existente: ej: service-role/summerUser-role-qt60vmww  (se va a modificar en unos minutos)
 
 
 **Desencadenador, mas adelante cuando ya se tenga la lambda desarrollada** 
@@ -984,8 +984,13 @@ Se tiene un permiso de Amazon CloudWatch Logs
 Destino : No hay destino, eso es si tenemos una cadena de lambdas, se tiene una lambda que termina y le pasa a la otra lambda.
 
 
-URL de funcion: se va a usar cuando se tenga la lambnda principal.
+URL de funcion: se va a usar cuando se tenga la lambnda principal. Esto vendria ser como disponibilizarla publicamente la API Gateway.
 
+Por supuesto todas las modificaciones se van a hacer desde la opcion de API Gateway.
+
+Variables de entrono es muy importante por que si mi lambda va a recibir variables de entorno con valores.
+
+"el nombre dels ecret donde tiene que leer las credenciales de la base de datos"
 
 
 
