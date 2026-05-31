@@ -1058,21 +1058,21 @@ Y aqui en rol de ejecucion por recursos,  y aca cuando venimos y buscamos secret
 
 
 
-- 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### 47. Creación del proyecto en Github y clonación en PC Local
+
+Lambda de registro de usuarios
+
+Github
+
+
+/gambituser
+
+/gambit va a ser el segundo repositorio y va a tner toda la APi de todo el backend.
+
+Recordar que son 2 lambdas que se van a desarrollar. La mas pequeña es la oprimera que tendra que ver con el registro de usuarios.
+
+Aca no hay endpoints, ni resouesta HTTP ni nada sino que va a ser una reswpuesta HHTTP full, entre el cognito y la lambda,
+
 
 
 ### 48. Iniciando el desarrollo en GO
