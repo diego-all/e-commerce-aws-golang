@@ -988,9 +988,83 @@ URL de funcion: se va a usar cuando se tenga la lambnda principal. Esto vendria 
 
 Por supuesto todas las modificaciones se van a hacer desde la opcion de API Gateway.
 
-Variables de entrono es muy importante por que si mi lambda va a recibir variables de entorno con valores.
+Variables de entorno es muy importante por que si mi lambda va a recibir variables de entorno con valores.
 
-"el nombre dels ecret donde tiene que leer las credenciales de la base de datos"
+"el nombre del secret donde tiene que leer las credenciales de la base de datos"
+
+Una es dinamica a traves de un json que puede ser variable
+y otra son las variables de entorno, no son dinamicas una vez que esten configuradas con su valor.
+
+A no ser que uno vuelva a modificar el valor, esta variable queda como una constante, aunque diga que es variable.
+
+SI yo quiero una lambda reciba parametros y que en base a esos parametros funcione de manera diferente cada vez, lo voy a tener que hacer como port json.
+
+Nuestras lambdas pueden o no tener esos parametros variables.
+
+de ehcho esta lambda que se va a desarrollar primero no tiene parametros json, sino que tiene variables de entorno
+
+
+- Etiquetas: si queremos etiquetar nuestro recurso. para que se usan? un desarrollo X, que tiene un nombre, que implica varios recursos a todos se le coloca la misma etiqueta para identificar todos los recursos que se llevo ese desarrolloo, es util para eso y para muchas cosas mas. 
+
+- VPC no tenemos ninguna VPC configurada por que nuestra base es publica y la puedo acceder desde cualquier 
+lado sin necesidad de una VPC.
+
+- Herramientas de monitoreo y operaciones: me dice lo que tenemos, los registros y metricas que estan habilitados en Cloud Watch.
+
+- Concurrencia: (Realmente no lo usa)
+Simultaneidad de cuenta no reservada = 1000
+1000 personas accediendo al mismo momento a la lambda.
+
+
+- Invocacion asincrona (reintentos)
+Antiguedad maxima del eventos (Cuando pasaron 6 horas, ese evento ya no tiene reintentos)
+
+Si uno quiere que una lambda corra en determinado horario, y sabiendo que a la hora ya no nos sirve. Se puede ajustar la antiguedad maxima del evento, para que no haga mas reintentos por que quizas a la hora viene otra pegada a esa misma lambda desde otroservicio. 
+
+- Forma de codigo: No lo vamos a usar.
+
+- Proxy de base de datos (No tenemos ningun proxy creado) Tenemos nuestro motor de MySQL sin proxys.
+
+- Sistema de archivos: Por si nosotros queremos agregar a nuestra Lambda un sistema de archivo, por que 
+nuestra lambda tiene que grabar en disco algo, o leer de disco, Aqui podemos agregar a un sistema de archivo para conectar a nuestra lambda una VP determinada, Recuerden que es un serverless, no tenemos control ni acceeso a nada de lo que ocurre en el hardware, 
+
+¿Entonces que pasa cuando nuestra lambda tiene que grabar un archivo?
+tenemos la posibilidad de agregar un sistema de archivos, nosotros no lo vamos a usar para nada en este desarrollo.
+
+- Maquinas de estado: Nos permite crear step function que es un poco lo que le decia antes,  Una lambda que si fallo se llama otra, pero si el resultado anduvo bien, puede llamar otra diferente.
+Crear como una logica de ejecucion y maquinas de estado. No lo vamos a utilizar.
+
+
+Que vamos a utilizar
+Configuracion general.
+Permisos
+URL de funcion
+Variables de entorno
+
+Ir a permisos vemos que esta nuestro rol, hacemos click y vamos al panel de IAM, abre nuestro rol, nos dice que tiene una politica asociada, y esa politica es lo que tiene de b asico de ejecucion las lambdas, 
+Que es ni mas ni menos lo que vimos, la posibilidad de crear logs streams dentro de Cloud Watch y ahi poder grabar todo lo que tenemos que haacer.
+
+**Pero aqui vamos a tener que añadirle un permiso mas** Se hace click en añadir permiso, > Asociar politicas
+
+Y buscar el servicio de Secret Manager, 
+
+Si nosotros no le decimos a nuestro rol, que tiene permisos para leer Secret Manager, cuando desde nuestra lambda, quiera ir al servicio de Ssecret Manager, obtener el script va a dar un error de permiso,, la lambda no va a funcionar.  
+
+Entonces aqui, ademas del rol basico de lambda, vamos a tener que buscar la palabra secret, le damos secret y aqui tenemos el servicio de SEcret Manager, lo tildamos agregamos los permisos y aqui vamos que ya  tenemos los permisos de secret manager, cuales? todos los permisos habidos y por haber.
+
+**Rol de ejecucion**
+
+Y aqui en rol de ejecucion por recursos,  y aca cuando venimos y buscamos secret manager, vemos que tenem,os alojados el acceso a todos los recursos de secret manager, 
+
+
+
+- 
+
+
+
+
+
+
 
 
 
