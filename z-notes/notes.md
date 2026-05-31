@@ -1126,7 +1126,51 @@ github.com/aws/aws-lambda-go/events"
 
 **EjecutoLambda** va a recibir el evento:
 
+Va a recibir la informacion del evento, y dentro vamos a procesar todo ese evento.
+
+
+Es el contexto,  es algo medio complejo de comprender para los que nunca usaron contextos, pero en lo que es muli ejecucion,  lo que es multihilos, lo que es una ejecucion encadenada de varias funciones, 
+
+Los contextos nos permiten un ambito de dialogo,  com para poder manejar variables, manejar consignas, timeouts y mucha informacion,  que va a ordernar, es como un director de orquesta 
+
+Nosotros lo vamosoa utilizar simplemente para mendionarlo como parametro,  por que es obligtorio  de las lambdas pero internamente,  no vamos a trabajar con contextos,  
+
+Asio que no se preocupen simplemente copien como se va a escribir ahora,  
+
+Lo definimos como parametro,  es obligatorio, pero internamente lo vamos a usar solo para el inicio de sesion. Como parametro tambien, recibe ese contexto y se lo pasa solo como inicio de sesion, a Amazon por que vamos a tener que iniciar sesion, hay todo un tema de autenticacion, cuando nuestra lambda quiere comenzar a trabajar, y el segundo parametro que vamos a definir es el event, que va a pertenecer a avents, y aca vamos a tener todos los tipos de eventos, por que? por que en Amazon tenemos muchisimos servicios, 
+
+Yo estoy recibiendo un evento perod e que servicio?
+
+Hay un evento por cada cosa que ocurra con mi userPool, y aqui tenemos el eventos.
+
+    event events.CognitoEventUserPoolsPostConfirmation) 
+
+Si yo quiero que mi usergroup no requiera confirmacion y con el mero hecho de registrarse, con el login sin  confitmacion, dispare una lambda voy a usar otro tipo de evento. 
+
+Aca se esta utilizando CognitoEventUserPool post confirmation, cuando el usuario confirmo .DDD
+
+Esta funcion como es una funcion lambda le debe devolver a Amazon algo, elr esultado de como anduvo todo, si hubo un error o no.
+
+Entonces se va a devolver 2 objetos, uno va a ser de tipo events, hay que deolver exactamente lo mismo , lo mismo
+
+Obviamente va a tener valores, va a ser el mismo objeto pero va a tener valores,
+
+    func EjecutoLambda(ctx context.Context, event events.CognitoEventUserPoolsPostConfirmation) (events.CognitoEventUserPoolsPostConfirmation, error) {
+
+    }
+
+Fundamental para las lambdas, permite grabar el CloudWatch el error, y vamos a poder hacer cosas.
+
+
+Imaginese que esto fuera parte de una maquina de estados, una step functions. Donde una lambda cuando devuelve error debe ejecutar otra, osea es parte de una maquina de estados.
+
+
+
 ### 49. Desarrollo de paquete AWSGO
+
+
+
+
 
 ### 50. Desarrollo de paquete Models
 
