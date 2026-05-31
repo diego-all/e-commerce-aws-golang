@@ -1071,12 +1071,60 @@ Github
 
 Recordar que son 2 lambdas que se van a desarrollar. La mas pequeña es la oprimera que tendra que ver con el registro de usuarios.
 
-Aca no hay endpoints, ni resouesta HTTP ni nada sino que va a ser una reswpuesta HHTTP full, entre el cognito y la lambda,
+Aca no hay endpoints, ni resouesta HTTP ni nada sino que va a ser una reswpuesta HHTTP full, entre el cognito y la lambda, 
 
 
 
 ### 48. Iniciando el desarrollo en GO
 
+
+En que se diferencia el desarrollo de una lambda de amazon y eld esarrollo normal de Go?
+
+Aca en el main no puedo colocar el codigo, sino que desde aqui tengo que indicarle la llamada a una funcion que es la que va a tener todo el procesamiento.
+
+
+go get github.con/aws/aws-lambda-go/lambda
+
+
+
+tenemops una lambda como disparardor como trigger de cognito.
+
+La estructura basica de cualquier basica en Go que se desarrolle es esta:
+
+se tiene que importar el paquete de lambdas, 
+
+
+import (
+	lambda "github.com/aws/aws-lambda-go/lambda"
+)
+
+La funcion main va a llamar a otra funcion que ejecuta la lambda.
+
+yu aca sse van a recibir los parametros propios de la ña,ndas, por que estass
+
+
+Imaghinese que nosotros tenemos esta lambda como disparador, como trogger de cognito, 
+
+Cuando un usuario registrdo confirma su mail en cognito, va a disparar el llamado a esta lambda, y le va a pasar parametros obviamente o sino no nos sirve de nada. 
+que parametros? el registro del usuario.
+Cuando tengamos los datos del usuario, 
+
+el userid que le crea cognito, que es un userid bastante textenso, no es sinmplente un numero,
+
+Vamos a poder registrar con su mail, y con su nombre todos los datos dentro de nuestyra base de datos, 
+
+
+
+Otra cosa que si vamos a tener que importar, si estsmoa hablando de evento.
+Estamos hablando de que esto va a ser el trigger de cognito, vamos a tener que exportar un paquete mas que es el paquete de eventos. Sino no va a tener las funciones y propiedades necesarias.
+
+
+Vamos a estar jugando con los eventos de amazon.
+
+github.com/aws/aws-lambda-go/events"
+
+
+**EjecutoLambda** va a recibir el evento:
 
 ### 49. Desarrollo de paquete AWSGO
 
