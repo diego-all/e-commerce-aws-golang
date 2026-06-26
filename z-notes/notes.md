@@ -1082,10 +1082,7 @@ En que se diferencia el desarrollo de una lambda de amazon y eld esarrollo norma
 
 Aca en el main no puedo colocar el codigo, sino que desde aqui tengo que indicarle la llamada a una funcion que es la que va a tener todo el procesamiento.
 
-
-go get github.con/aws/aws-lambda-go/lambda
-
-
+    go get github.con/aws/aws-lambda-go/lambda
 
 tenemops una lambda como disparardor como trigger de cognito.
 
@@ -1165,14 +1162,156 @@ Fundamental para las lambdas, permite grabar el CloudWatch el error, y vamos a p
 Imaginese que esto fuera parte de una maquina de estados, una step functions. Donde una lambda cuando devuelve error debe ejecutar otra, osea es parte de una maquina de estados.
 
 
+Paquete de aws go para inicio de sesion y demas.
+
+
+
+
 
 ### 49. Desarrollo de paquete AWSGO
 
+Se va a crear el primer paqeute que tiene que ver con Amazon y se llamara AWS Go.
+
+
+    go get -u github.com/aws/aws-sdk-go-v2/aws
+
+    go get -u github.com/aws/aws-sdk-go-v2/config 
+
+Tiene que ver con toda la configuracion de inicio de sesion y demas.
+
+	Ctx = context.TODO() 
+
+Es un contexto vacio, 
+
+Cuando nosotrod queramso recibir la configuracion d3efaultr que tiene Amazone en nuestra cuenta.
+
+Trae todas las confoguiraciones que tyiene Amazon dentro de nuestra cuenta y con esto vamos a trabajr dentro de nuestra lambda.
+
+    var Cfg aws.Config
+
+Es una estructura que tiene todo lo necesario para manejar las configuraciones de inicio de sesion.
+
+Se va a crear una funcion exportable que se va a llamar InicializoAWS
+
+
+	Ctx = context.TODO()
+
+Retorna un no nulo es un entorno vacio. (empty context)
+Aca no hay limitacion en el contexto. Se podria decir que el timeout es de 1 minuto.
+Mientras se este ejecutando todo, al minuto se termina el contexto, anula las ejecuciones yu asi como hemos terminado, abandona la lambda, 
+
+Lee el SDK default external configuration.
+Lee toda la configuracion externa de lo que se tiene en la cuenta de amazon creada.
+
+
+Aca esta awsgo.go
+
+
+    package awsgo
+
+    import (
+        "context"
+
+        "github.com/aws/aws-sdk-go-v2/aws"
+        "github.com/aws/aws-sdk-go-v2/config"
+    )
+
+    // github.com/aws/aws-sdk-go-v2/config
+    // github.com/aws/aws-sdk-go-v2/aws
+
+    var Ctx context.Context
+    var Cfg aws.Config
+    var err error
+
+    func InicializoAWS() {
+        Ctx = context.TODO()
+        Cfg, err = config.LoadDefaultConfig(Ctx, config.WithDefaultRegion("us-east-1"))
+
+        if err != nil {
+            panic("Error al cargar la configurations .aws/config " + err.Error())
+        }
+
+    }
+
+
+
+
+Este es el programa main.go
+
+    package main
+
+    import (
+        "context"
+        "summeruser/awsgo"
+
+        lambda "github.com/aws/aws-lambda-go/lambda"
+        // go get github.com/aws/aws-lambda-go/events
+        "github.com/aws/aws-lambda-go/events"
+        //summeruser/awsgo
+    )
+
+    func main() {
+
+        lambda.Start(EjecutoLambda)
+
+    }
+
+    func EjecutoLambda(ctx context.Context, event events.CognitoEventUserPoolsPostConfirmation) (events.CognitoEventUserPoolsPostConfirmation, error) {
+        awsgo.InicializoAWS()
+    }
+
+
+Se va a ir agregaod paquete funcionalidad, hasta que la lambda este terminada.
 
 
 
 
 ### 50. Desarrollo de paquete Models
+
+Vamos a continuar con el segundo paquete, va a ser models.
+
+La secret Manager se apoya en estructuras, esa estryuctura se va a tener metida en models.
+
+Se crea el archivo /models/models.go
+
+Se van a hacer definiciones de estructuras.
+
+
+Se va a definir la primera estructura que es la que se utiliza cuando secret manager se conecta a RDS y lee el secreto no solamente nos devuelve la clave del usuario principal, 
+puede ser root, admin o lo que sea, sino que nos devuelve 6 valores.
+
+
+	Username            string `json:"username"`
+	Password            string `json:"password"`
+	Engine              string `json:"engine"`
+	Host                string `json:"host"`
+	Port                int    `json:"port"`
+	DbClusterIdentifier string `json:"dbCLusterIdentifier"`
+}
+
+
+
+Ahora una nueva estructtura que tiene que ver con el registro de usuarios.
+
+CUando se haga la conexion a secret manager a la base, depende del evento de cognito, vamos a recibir parametros, dentro de los parametros que vamos a recibir que son muchos nos interesan 2 datos nada mas: el user email y el user id.
+
+Que seria el id de usuario que vamos a grabar en la base de datos, se va a crear un nuevo struct llamado signup , por que va a contener los datos del registro. 
+
+
+type SignUp struct {
+	UserEmail string `json:"UserEmail"`
+	UserUUID  string `json:"UserUUID"`
+}
+
+
+
+
+
+
+
+
+
+
 
 
 ### 51. Desarrollo de paquete Secret Manager
