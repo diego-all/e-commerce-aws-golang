@@ -1304,48 +1304,300 @@ type SignUp struct {
 }
 
 
+Recordar que la lambda tiene variables de entorno. Por ende se utiliza el paquete os.
 
+No es buena practica llenar de codigo la funcion principal si no que se va a hacer en una funcion aparte.
 
-
-
-
-
-
-
+Vamos a ver en la segunda lambda, la del ecommerce, esto es fundamental, por que en un e commerse se reciben muchas variables de entorno no solo una.
+Ahora se va a crear una funcion que se va a llamar ValidoParametros() no recibe nada pero devuelve un boolean.
 
 
 ### 51. Desarrollo de paquete Secret Manager
+
+Los secretos para la lambda estan en Secret Manager.
+
+    go get -u github.com/aws/aws-sdk-go-v2/service/secretsmanager
+
+Se crea la funcion GetSecret() en secretmanager.go
+
+POr que no se le puede madnar el secret directo?
+
+Por que es un tipo especial,no es un string normal. es un puntero de string.
+Entonces se tiene que usar una funcion del paquete de amazon, recibe un string y me devuelve un puntero de string.
 
 
 ### 52. Desarrollo de paquete Tools & Completamos BD
 
 
+Vamos a crear un paquete nuevo que se va a llamar tools. y va a tener una funcion que va a ser usada por el paquete de base de datos y se hace por una buena practica. POr que cuando se van a hacer funciones que no tienen nada que ver con ningun paquete, ni con secretmanager ni con awsgo, ni m,odels, va a ser uasada por base de datos pero no es base de datos en si misma , se hara en un paquete aparte. Va a ayudar a ordenar el codigo de mejor manera.
+
+
+go get -u github.com/go-sql-driver/mysql
+
+
+
+Secret manager me devuelve una estructura con 6 valores.
+
+Una funcion que los agrupe en e l formato del connection string.
+
+Conexion basica de la base de datos.
+
+
 
 ### 53. Compilamos nuestra Lambda y la subimos a AWS
 
+Llego el turno de compilar la solucion para poder llevarla a Amazon.
+El problema es que amazon solo acepta ejecutables de Go en formato Linux.
+No Windows, no mac. Se debe compilar la solucion con unas instrucciones para que el ejecutable sea compatible con Linux.
+
+EN windows se crea un .bat
+
+**subo.bat**
+
+git add .
+git commit -m "ultimo commit"
+git push
+
+set GOOS=linux
+set GOARCH=amd64
+go build main.go
+del main.zip
+tar.exe -a -cf main.zip main
+
+
+Amazon pide que las lambdas se suban zipeadas.
+
+
+En linux se crea un .sh
+
+
+    GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -o bootstrap main.go
+
+    zip function.zip bootstrap
+
+
+Para los archivos mayores de 10 MB, considere la posibilidad de cargarlos usando Amazon S3.
+
+Funciono bien, se desplego el secret con terraform.
+Y se subio la lambda desde un zip.
+
+
+
+**Despliegue**
+
+
+Existen tres formas principales de empaquetar y desplegar una Lambda en Go:
+
+1. Archivo ZIP (Lo que estás haciendo actualmente):
+
+Compilas el binario con GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -o bootstrap main.go y empaquetas la raíz en function.zip.
+
+Ventaja: Muy liviano, arranque en frío (cold start) ultra rápido y simple de integrar en Terraform con source_code_hash.
+
+2. Imagen de Contenedor (Docker/ECR):
+
+Empaquetas tu ejecutable en una imagen Docker ligera (ej. basada en alpine o scratch) y la subes a Amazon ECR.
+
+Ventaja: Ideal si el binario o las dependencias sobrepasan los límites de un ZIP, o si estandarizas todo el deployment de tu compañía con imágenes OCI/Docker.
+
+3. Frameworks de Despliegue (Serverless Framework / AWS SAM):
+
+Automatizan la compilación del paquete Go y la creación de la infraestructura subyacente mediante comandos de CLI como sam deploy o sls deploy.
+
+Para tu caso actual con Terraform, la estrategia de ZIP sigue siendo la mejor opción y la más eficiente.
+
+
+
+
 
 ### 54. Configurar Trigger de Cognito como disparador de la Lambda
+
+Configurar la variable de entorno en la lambda:
+SecretName = gambit
+
+Esta en AWS Secret Manager
+
+Agregar desencadenador (trigger)
+
+Se necesita Cognito y RDS.
+
+
+
+Cognito > Grupo de Usuarios
+
+En cognito en propiedades del grupo de usuarios se debe 
+
+Agregar el desencadenador o trigger para la lambda.
+
+Aue es lo que va a pasar cuando ocurra cualquiera de estas 4 cosas.
+
+- Registro
+- Autenticacion
+- Autenticacion personalizada
+- Mensajeria
+
+Se va a usar **Registro**
+
+Por que la autenticacion seria disparar trigge4r cuando el usuario se loggea. Puede ser muy util para otro tipo de lambda y otro tipo de funcionalidad.
+En este caso lo unico que queremos hacer es registrar el usuario, 
+
+Una vez que se tiene registro se va a tner que elegir, En que eventos?
+
+- Desencadenador de antes del registro
+**- Desencadenador de despues de la confirmacion**
+- Desencadenador de migrar usuario
+
+Funcion Lambda:
+
+Asignar una función lambda.
+summer
+
+Finalmente se da click en **Agregar desencadenador de Lambda**
+
+
+Y una vez que se tiene el desencadenador de lambda configurado, se va a tener que crear un pool de identidades. Lo que aqui se llama identidader federadas.
+
+Se habia mencionado que no se iba a usar por que no se iba a realizar una autenticacion con facebook o google, etc.
+Pero tenemos que crear una identidad federada de gambit para que pueda interactuar y enviar informacion a la lambda
+
+Se entra a identidades federadas, se crea uno nuevo para summer,
+
+
+3: 34 pendiente
+
+
+
+
+
+5: 20
+ 
+En desencadenadores, se agrega uno y se le indica que es de tipo:
+
+**Cognito Sync trigger**
+
+y Luego se eligen cuales son las identidades, se elige la creada anteriormente ...
+
+Se le da click en agregar
+
+**Ahora ya aparece el desencadenador en la lambda**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 ### 55. Probamos la solución completa
 
 
+Se accede a la interfaz de sign up desde 
+
+Entrando al grupo de usuarios (user pool)  Applications > App clients
+
+Si se quiere utilziar siempre el mismo mail sin que diga que ya existe, con agregarle un signop + y un numero.
+
+**tilottapablo+27@gmail.com**
+
+Se puede utilizar todas las veces que quieran 
+
+Se va a enviar un verification code.
+
+
+
+Me aparece este error:
+
+    This site can’t be reached
+    localhost refused to connect.
+    Try:
+
+    Checking the connection
+    Checking the proxy and the firewall
+    ERR_CONNECTION_REFUSED
+
+https://localhost:3000/?code=af879e57-f766-45ab-b26d-d57f8b150238
+
+
+cómo funciona Cognito como Identity Provider.
+
+
+Ahora bien si me aparece el usuario registrado, y me pude autenticar.
+Nunca aparecio el trigger (Cognito Sync Trigger)
+
+Lo asigna Cognito automáticamente, no tu código ni tu base de datos. Cada vez que se crea un usuario en un User Pool, Cognito le genera un atributo estándar llamado sub (subject) — es un UUID único e inmutable que identifica a ese usuario para siempre dentro del pool, siguiendo el estándar OpenID Connect (donde sub es el claim obligatorio que identifica al sujeto del token).
+
+
+mysql> select * from users;
++--------------------------------------+------------------------+----------------+---------------+-------------+---------------------+--------------+
+| User_UUID                            | User_Email             | User_FirstName | User_LastName | User_Status | User_DateAdd        | User_DateUpg |
++--------------------------------------+------------------------+----------------+---------------+-------------+---------------------+--------------+
+| b438a4b8-b0b1-700b-ae07-b34e35eed4d1 | dposadallano@gmail.com | NULL           | NULL          |           1 | 2026-07-29 22:18:14 | NULL         |
++--------------------------------------+------------------------+----------------+---------------+-------------+---------------------+--------------+
+1 row in set (0,09 sec)
+
+
+
+**En cognito**
+
+User name
+	
+Email address
+	
+Email verified
+	
+Confirmation status
+	
+Status
+
+**b438a4b8-b0b1-700b-ae07-b34e35eed4d1**
+dposadallano@gmail.com
+Yes
+Confirmed
+Enabled
+
+
+Esto confirma que me pude resigtrar con cognito, valide mi mail, esto disparo por trigger la lambda, todo eld esarrollo implementado y finalmente se han guardado en la base de datos.
+
+User_status = 1 = User
+User_status = 0 = Admin
+
+
+cada verz que tenga que hacer una operacion, voy a tener que loggearme como admin, cuando queira crear categorias, borrar usuarios. O modificar datos de productos. Crear productos, todo esto son atributos del admin.
+
+
+Esto lo vamos a ver cuando desarrollemos el e-commerce.
+
+Ya terminamos la primer lambda, 
+
+
+
+Una lambda son muchos archivos, una lambda es un servidor.
+
+
+No se como empaquetaban eso en Bold en un monorepo, "magia de Devops".
+Repo de infra + repo de lambdas.
+
+Economizar dinero en infra de nube. un api gateway para todos solo agregar una ruta.
+
+
+
 
 ## Sección 9: API Gateway directo a s3 para alojar imagenes
 
+Aprender a crear un API Gateway directo a S3
 
-###
-
-###
-
-###
-
-
-###
-
-
-###
 
 
 ## Sección 10: Backend - Lambda Principal
