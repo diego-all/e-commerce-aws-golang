@@ -1596,7 +1596,37 @@ Economizar dinero en infra de nube. un api gateway para todos solo agregar una r
 
 ## Sección 9: API Gateway directo a s3 para alojar imagenes
 
-Aprender a crear un API Gateway directo a S3
+Aprender a crear un API Gateway directo a S3.
+
+
+Crear un bucket s3 que va a alojar nuestras imagenes. Luego se va a crear un API Gateway, que es el servicio que me permite disponibilizar una API publica, y la vamos a configurar de manera que cuando llegue una aplicacion de tipo PUT hacia la ruta que vamos a definir.
+
+El contenido de esta pweticion que va a ser un archivo *.jpg, o *.png, lo almacene en nuestro bucket S3 sin codigo, sin lambdas, sin nada. Hay una forma hay unos pasos, no es tan simple, pero siguiendo los pasos se logra, para configurar un API Gateway inclusive con autenticacion de Cognito.
+
+Osea nuestro endpoint va a recibir un token, y lo va a validar para que desde afuera cualquiera no pueda pegarle.
+Va a validar que sea un token valido, que no este expirado, que sea de mi grupo de usuarios de gambit, una vez que valida esto el archivo que reciba por la peticion PUT, luego vamos a ver como configurar postman para lograrlo,  ese archivo lo va a alojar en el bucket s3.
+
+Obviamente cuando ustedes vean la parte del frontend, se va a hacer sin postman, va a enviar el avatar del usuario o la imagen del producto, las van a enviar hasta estas URLs.
+
+Simple Storage Service (s3)
+
+Crean un bucket desde la consola web.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
