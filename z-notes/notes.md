@@ -1885,7 +1885,6 @@ Una vez que ya tenemos la solicutud de integracion.
 
 ### 61. Cargando las reglas al bucket s3 
 
-
 Recordar que se tiene una dependencia:
 
 
@@ -1896,19 +1895,6 @@ Recordar que se tiene una dependencia:
 - API Gateway
 - Bucket S3 (Politica)
 
-
-
-
-
-
-
-### 62. 
-
-
-
-
-
-### 63. 
 
 
 URLs del Hosted UI
@@ -1959,10 +1945,7 @@ https://localhost:3000/#id_token=eyJraWQiOiJBakZYRThPSGt5ZVJjZnZWL1hDVkt2eHFyN2p
 }
 
 
-
-Hasta la primera firma. (o primer punto).
-
-
+Hasta la primera firma. (o primer punto). (validar)
 
 se realizan 2 curlts para subir las imagenes al bucket.
 
@@ -1970,9 +1953,6 @@ se realizan 2 curlts para subir las imagenes al bucket.
 Paso 1. Crea una petición nueva en Postman. Cambia el método a PUT y pega esta URL:
 
 https://65ktuy96tk.execute-api.us-east-1.amazonaws.com/dev/summer-images-800445863816/diego.png
-
-
-
 
 
 Paso 1. Desde la terminal de root (donde está el perfil bold-free-tier), pídele a API Gateway los métodos de esa ruta:
@@ -1992,48 +1972,202 @@ root@p3rseus:/home/diegoall/courses/e-commerce-aws-golang# aws apigateway get-re
 
 
 
+### 62. Asignando aws.cognito.sigin.user.admin
+
+CURSO: CONFIGURACION Y AJUSTES DE AUTENTICACION EN AWS COGNITO
+
+
+
+TITULO DEL AJUSTE
+
+Habilitacion del ambito (scope) aws.cognito.signin.user.admin en AWS Cognito User Pool
 
 
 
 
 
+1. PROBLEMA IDENTIFICADO
+
+- Al realizar pruebas de autenticacion de las APIs (como la API de S3) a traves de clientes HTTP de escritorio como Postman o Insomnia, las peticiones funcionan correctamente.
+
+- Sin embargo, al interactuar e intentar autenticarse directamente desde una aplicacion Frontend, el token de autenticacion (JWT) enviado hacia API Gateway es rechazado o causa un error de autenticacion.
 
 
 
 
 
+2. EXPLICACION TECNICA
+
+- Los ambitos de OpenID Connect/OAuth 2.0 por defecto (email y openid) son suficientes para obtener la identidad basica del usuario mediante un cliente HTTP simulado.
+
+- Para que una aplicacion web/frontend real pueda interactuar plenamente con las APIs protegidas por API Gateway y autorizadas por Cognito, el token debe incluir explicitamente el permiso/ambito de administracion del usuario sign-in.
+
+- Agregar el ambito aws.cognito.signin.user.admin otorga los privilegios necesarios dentro del token para que API Gateway y Cognito validen la sesion sin rechazos de autenticacion.
 
 
 
 
 
+3. SOLUCION PASO A PASO EN AWS CONSOLE
+
+
+Paso 1: Acceder al servicio AWS Cognito en la consola de AWS.
+
+Paso 2: Navegar a los "Grupos de usuarios" (User Pools) y seleccionar el grupo del proyecto (ejemplo: Gambit).
+
+Paso 3: Dirigirse a la seccion o pestana "Integracion de aplicaciones" (App Integration).
+
+Paso 4: Seleccionar la aplicacion cliente especifica (cliente de la app / Gambit).
+
+Paso 5: Ubicar la seccion "Interfaz de usuario alojada" (Hosted UI) o la configuracion de OAuth/OpenID Connect scopes.
+
+Paso 6: Hacer clic en "Editar".
+
+Paso 7: En los "Ambitos de OpenID Connect" (OAuth Scopes), mantener marcados los existentes (email y openid) y adicionar/marcar:
+
+        aws.cognito.signin.user.admin
+
+Paso 8: Guardar los cambios.
+
+4. PROXIMOS PASOS
+
+- En la siguiente clase se realizara una modificacion en API Gateway para ajustar los CORS (Cross-Origin Resource Sharing) y garantizar la comunicacion completa con el Frontend.
+
+
+Se modifica el tf de cognito
+
+    allowed_oauth_scopes                 = ["openid", "email", "aws.cognito.signin.user.admin"] # Lección 62: se agrega el ámbito aws.cognito.signin.user.admin
+
+
+Agregar el ámbito al cliente solo permite pedirlo. Para que el token lo traiga, el login debe solicitarlo. Prueba con esta URL en el navegador (lleva el ámbito nuevo en scope=):
 
 
 
+Comprobar el cambio
+
+Agregar el ámbito al cliente solo permite pedirlo. Para que el token lo traiga, el login debe solicitarlo. Prueba con esta URL en el navegador (lleva el ámbito nuevo en scope=):
+
+https://summer-app-dev-unique.auth.us-east-1.amazoncognito.com/login?client_id=38h0d6file3a5hpqej1a7s2nm4&response_type=token&scope=openid+email+aws.cognito.signin.user.admin&redirect_uri=https://localhost:3000
+
+Antes del cambio esa URL habría dado un error de ámbito no válido (invalid_scope). Ahora debe iniciar sesión normalmente. Extrae el access_token y decodifícalo:
+
+echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null; echo
+
+El campo "scope" debe mostrar openid email aws.cognito.signin.user.admin.
+
+Un detalle para la lección 64: no toqué api_gateway.tf, así que el método PUT sigue exigiendo el ámbito openid. El token que pida los tres ámbitos lo cumple. Si en el front el token llegara solo con aws.cognito.signin.user.admin, daría 401 y habría que ajustar authorization_scopes. Eso lo vemos cuando pruebes con la app o si el profesor lo cambia en la lección siguiente
 
 
 
+La URL de redirección que pegaste lo confirma. Decodifiqué el access_token y su campo scope dice aws.cognito.signin.user.admin openid email. Antes de este cambio, pedir ese ámbito en el login habría dado un error. Y como el token conserva openid, el método PUT de API Gateway (que exige openid) lo sigue aceptando.
 
 
+root@p3rseus:/home/diegoall/courses/e-commerce-aws-golang# read -r -s URL
 
-
-
-
-
-### 60. Reglas de Politica al Bucket S3
-
-
-### 61. Cargando las reglas al bucket S3
-
-
-### 62. Asignando aws.cognito.sigin.user.admin 
+root@p3rseus:/home/diegoall/courses/e-commerce-aws-golang# TOKEN=$(echo "$URL" | sed -E 's/.*access_token=([^&]*).*/\1/')
+echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null; echo
+{"sub":"c4584468-20f1-70f2-df2c-5142647b0924","token_use":"access","scope":"aws.cognito.signin.user.admin openid email","auth_time":1791872916,"iss":"https://cognito-idp.us-east-1.amazonaws.com/us-east-1_QJZVG4RRq","exp":1791959316,"iat":1791872916,"version":2,"jti":"68b93ccd-50ca-4376-aa0b-5d5620ace15a","client_id":"38h0d6file3a5hpqej1a7s2nm4","username":"c4584468-20f1-70f2-df2c-5142647b0924"}
 
 
 ### 63. Ultimos ajustes en CORS para el metodo PUT
 
+Bueno, y vamos al segundo ajuste, esta vez en el API Gateway, en el método S3 que habíamos creado recién. Vamos a ir a la ruta donde estamos, sin hacer ningún tipo de cambio, vamos a ir a Acciones y vamos a habilitar CORS. Ocurre lo mismo: desde Postman funciona todo bárbaro, y cuando lo intentamos hacer desde la aplicación, desde el e-commerce directamente, nos daba un error de CORS.
+
+Así que vamos a entrar aquí y vamos a dejar todo como está, con asterisco para que habilite todo. De hecho, me aclara que si dejamos el asterisco va a estar disponible para cualquier origen y dominio. Luego vamos a hacer la habilitación de CORS aquí directamente. Me avisa todo lo que va a hacer, le digo que siga, que reemplace los valores existentes, y va a ir haciendo la modificación que tiene que hacer.
+
+Una vez que hacemos esto, lo que tenemos que hacer es implementar la API. Hacemos clic en Implementar API, elegimos Producción, que es la etapa de implementación en la que estamos, y hacemos clic en el botón Implementación.
+
+Recuerden, a partir de ahora, cada vez que ustedes hagan cambios en el API Gateway, si tuvieran que hacerlo, tienen que implementar nuevamente. Es como enviar a producción la API. Esto está pensado de la siguiente manera: mientras la API está activa, está recibiendo peticiones, y si por solo cambiar un valor ya se modificara el comportamiento, estaría haciendo algo malo. Entonces me permite modificar todo y, una vez que tengo todo listo y estoy seguro, implemento la API y la coloca como publicada, reemplazando la versión anterior.
+
+Bueno, esto era lo que teníamos que hacer: habilitar CORS en la ruta de PUT y directamente luego implementar la API. Así que ya no hay más ajustes en esta sección, y pasamos ya sí a probar la aplicación desde Postman para que vean cómo funciona. Nos vemos en el próximo capítulo.
 
 
-### 64. Probando la solucioon desde POSTMAN
+en API gateway
+
+se selecciona PUT, acciones y se habilitar CORS.
+
+
+
+El apply salió exactamente como el plan: se actualizó el Allow-Methods del OPTIONS, se creó el deployment nuevo (bxlqjn) y el stage dev ya apunta a él. El deployment viejo (s1ggfa) se eliminó después, gracias al create_before_destroy. Eso equivale a haber hecho “Implementar API” en la consola.
+
+Para comprobar que el preflight responde bien, puedes simular lo que hace el navegador:
+
+    root@p3rseus:/home/diegoall/courses/e-commerce-aws-golang# curl -i -X OPTIONS \
+    "https://65ktuy96tk.execute-api.us-east-1.amazonaws.com/dev/summer-images-800445863816/test.jpg" \
+    -H "Origin: http://localhost:3000" \
+    -H "Access-Control-Request-Method: PUT" \
+    -H "Access-Control-Request-Headers: authorization,content-type"
+    HTTP/2 200 
+    date: Tue, 13 Oct 2026 06:56:46 GMT
+    content-type: application/json
+    content-length: 0
+    x-amzn-requestid: 86a07c3f-d450-4b0d-911e-51fc08cbc2ae
+    access-control-allow-origin: *
+    access-control-allow-headers: Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token
+    x-amz-apigw-id: FK5naGTtoAMEeZA=
+    access-control-allow-methods: OPTIONS,PUT
+
+
+Listo, el preflight responde un 200 con las tres cabeceras CORS que esperábamos:
+
+access-control-allow-origin: *
+access-control-allow-methods: OPTIONS,PUT
+access-control-allow-headers: Content-Type,X-Amz-Date,Authorization,...
+
+Con esto la parte de CORS de la clase 63 quedó equivalente a lo que hiciste en la consola, ya con el deploy hecho. Puedes pasar a la 64, probar desde Postman. Las gateway responses para 4XX/5XX no las necesitas para el curso, así que las dejamos de lado.
+
+
+
+¿El api gateway tiene incorportado un load balancer?
+
+No, no como un load balancer propiamente dicho, aunque hace parte de ese trabajo de forma implícita.
+
+Lo que sí hace: API Gateway es un servicio administrado, regional y de alta disponibilidad. AWS ejecuta y escala por detrás la infraestructura que recibe tus peticiones (con límites de throttling por cuenta y región), así que no tienes que preocuparte por que “se llene” un servidor. En ese sentido absorbe y reparte el tráfico de entrada.
+
+Lo que no hace: no distribuye peticiones entre varios destinos de backend, ni hace health checks, ni tiene algoritmos de balanceo (round robin, menos conexiones, etc.). Cada método tiene una única integración, como tu PUT que va a S3. Si necesitas repartir carga entre varios servidores, pones un ALB o NLB detrás y API Gateway se conecta a él por VPC Link.
+
+En tu proyecto no hace falta: tus backends son servicios que escalan solos. S3 es administrado por AWS y Lambda crea instancias de ejecución en paralelo según la demanda. Por eso el curso no usa balanceador.
+
+Una nota sobre tu configuración: con types = ["REGIONAL"] el API vive en una sola región (us-east-1). Si fuera EDGE, las peticiones entrarían por CloudFront, que sí las distribuye geográficamente, pero eso es cercanía de red, no balanceo de carga.
+
+
+### 64. Probando la solución desde POSTMAN
+
+Bueno, y nos tocó el turno de probar nuestra solución. Esto que hicimos, toda la ruta con el API Gateway y las configuraciones de S3, lo vamos a probar desde Postman. Ustedes vieron que al principio del curso hicimos la instalación de Postman. Aquí lo tengo, vamos a configurarlo y a ver algunos secretos que, cuando uno no tiene mucha experiencia con Postman, no los sabe, pero que mejoran mucho la experiencia. Vamos a dar algunos tips.
+
+En primer lugar, en la parte de colecciones vamos a crear la colección de Gambit. Vamos a venir aquí y colocar Gambit. Ya lo habíamos hecho; si ya lo tienen, no hay que hacerlo de nuevo, así que no se preocupen.
+
+Antes de crear nuestro primer request, vamos a ver dónde guardar el token y dónde guardar la ruta. Aquí, donde estamos parados, que es Environments, podemos abrir los entornos con los que podemos trabajar. Tenemos uno local y uno global, y podemos crear más: producción, test, etcétera. Cuando están testeando una app, pueden ir a test y configurar las variables de entorno que van a usar ahí, y las de producción van a ser diferentes. En este caso todo va a ser lo mismo, así que vamos a trabajar en local, y vamos a crear variables.
+
+Por ejemplo, aquí tenemos una variable que es token. Aquí es donde ustedes van a venir todos los días que estén probando la API, para colocar el token que devuelve Cognito. Recuerden que les di una aplicación que sirve para obtener el token puro. Van a venir todos los días aquí, van a entrar en edición y van a reemplazar el token que figure aquí por el nuevo token.
+
+¿Qué me permite el uso de variables? Me permite no tener que ir a cada uno de los endpoints a colocar el token. Al manejarlo por variable, con cada endpoint apuntando a esa variable, cuando actualizo la variable del entorno se actualizan automáticamente todos los endpoints de la API y puedo trabajar sin problemas.
+
+Vamos a verlo. Vamos a agregar un request aquí, que va a ser el upload image para mi Gambit. Recuerden que era de tipo PUT. Ahora vamos a ir a nuestro API Gateway a copiar esta URL, pero en lugar de pegarla aquí en Postman, vamos a ir a la variable que dice ruta, vamos a editar y vamos a modificar esto. Obviamente yo estoy modificando una ruta porque ya trabajé con una variable ruta; ustedes no la van a tener, así que crean una nueva variable. ¿Cómo la crean? Aquí mismo ponen ruta, y ponen el valor tanto en el Initial Value como en el Current Value; en los dos ponen el mismo valor. Si quiero agregar otra variable, la escribo y listo.
+
+Bueno, muy bien, ya tengo ruta. Voy a grabarlo; esa es la nueva ruta para probar mi Gambit. Entonces, en mi endpoint, en lugar de pegar la URL, voy a colocar doble llave y la variable ruta. Ahí ya sabe que la ruta llega hasta producción, sabe todo esto, y a partir de ahí tengo que colocar los dos valores que necesito. ¿Cuáles son los dos valores que necesito? El nombre del bucket y el nombre del archivo. Incluso, si ustedes ya saben que van a trabajar siempre con el mismo bucket, lo pueden agregar a la ruta. Yo prefiero tenerlo visible afuera. Puedo colocar aquí gambit2images, que era el nombre del bucket, barra, y aquí viene el archivo.
+
+Ustedes pueden agregar el bucket a la ruta o no. Yo prefiero tenerlo visible afuera. Ahora van a colocar el nombre del archivo. Más allá del archivo que vamos a subir desde Postman como prueba, el nombre que va a respetar y con el cual se va a grabar en S3 es el que le digamos nosotros ahora. Entonces puedo poner 4.jpg. Aquí puedo subir un archivo que se llama Iron Maiden.jpg, pero cuando vaya al bucket va a estar con el nombre 4.jpg.
+
+Recuerden que el API Gateway toma estos valores: el primero lo toma como el bucket y sabe que en ese bucket tiene que grabar, y el segundo lo toma como el nombre del archivo. ¿Por qué? Porque este mismo API Gateway me sirve para distintos buckets, no solamente para este.
+
+Bueno, muy bien. ¿Qué tengo que hacer aparte de esto? Tengo que ir a Headers y agregar Authorization. Ya me lo sugiere porque es una palabra reservada. Aquí voy a colocar entre doble llave: token. Mañana, si mi token expiró, yo no tengo que venir a modificar el endpoint; directamente voy a la variable de entorno y la modifico. Si yo tuviera solamente un endpoint, no se justificaría tener una variable de entorno: vengo a Authorization y lo cambio. Pero como vamos a tener como 100 endpoints en el desarrollo de la API, imagínense que cada día que cambie el token tenga que ir a modificar 100 endpoints a mano. No. Directamente tengo esto grabado, va a ir a mi entorno y va a capturar el valor.
+
+Esto lo voy a grabar y ahora vamos a adjuntar el archivo. Vamos a ir a Body, y el body va a ser de tipo binary, porque voy a enviar un archivo. Esto es muy importante. Aquí voy a seleccionar archivos, vengo a la carpeta donde tengo mis archivos y voy a elegir, por ejemplo, el producto. Por más que se llame producto.jpg, en mi bucket va a ser 4.jpg. Lo grabo por las dudas, le doy Send y me devuelve un error con un status 200: el bucket especificado no existe. Se ve que tengo algo mal acá. Era gambit2images, con images en plural, perdón, me equivoqué.
+
+Bueno, de paso vemos qué pasa si envío mal el bucket. Aquí es plural, vamos a colocarle la S, vamos a grabar y vamos a enviar. Y ahora sí, status 200, todo anduvo bien. Me devuelve un 1, como que estuvo todo bien. Voy a mi bucket, hago un refresh y encuentro un archivo que es el 4.jpg. Le hago clic, y si hago clic aquí me va a mostrar la imagen que acabo de enviar. Esto es lo que el front va a empezar a trabajar: con cada ID de producto va a ir a buscar su ID específico con la imagen específica de cada producto.
+
+Ahora vamos a hacer otra prueba. Vamos a enviar, por ejemplo, un avatar. ¿Cuál era la diferencia? ¿Por qué no se pisa con el ID de producto? Porque este es el user ID. Vamos a copiarlo, venimos a Postman y reemplazamos el número 4 por todo ese dato. Ahora vamos a elegir otro archivo: volvemos a ir al disco C, carpeta Gambit, y este va a ser mi avatar. Le doy grabar, Sending, muy bien. Vengo a mi bucket, entro a imágenes y aquí tengo mi avatar, que pesa 169 kilobytes. No sé si me lo muestra. Bueno, aquí tengo mi avatar.
+
+Esto es lo que ustedes tienen que aprender para subir imágenes. Obviamente, cuando llegue la parte del front lo van a hacer de otra manera, pero lo importante es que han configurado el API Gateway con todos los permisos. Han visto que no es fácil, que son muchos pasos y que hay mucha configuración, y lo hemos logrado en algunos capítulos. Ya tenemos todo listo para subir imágenes, sean de producto o avatares de usuarios.
+
+Así que ya no queda nada más en esta tercera sección del curso, y vamos a pasar a la cuarta sección, que es la mejor de todas: vamos a empezar a desarrollar el e-commerce. Son muchos capítulos, pero vamos a ir paso a paso, probando cada uno de los endpoints, y van a ver qué divertido se hace. Así que nos vemos en la próxima sección, y ya arrancamos con nuestro e-commerce. Nos vemos.
+
+Una nota: el nombre del bucket no se entiende con claridad en el audio, así que lo escribí como gambit2images. Si en tu curso se llama distinto, ajústalo.
+
+
+**PENDIENTE**
+
 
 
 ## Sección 10: Backend - Lambda Principal

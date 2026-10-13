@@ -111,3 +111,12 @@ Cognito guarda los usuarios y entrega tokens. El Hosted UI es su pantalla de log
 API Gateway no ejecuta código. Valida el token y reenvía el PUT a S3, usando el segmento {folder} de la URL como nombre del bucket y {object} como nombre del archivo.
 La Lambda solo se ejecuta al confirmar un usuario, y copia su correo y su sub a MySQL.
 El Identity Pool y sus roles existen pero este flujo no los usa.
+
+
+### Terraform
+
+    terraform fmt
+    terraform validate
+    terraform plan -out=tfplan
+    terraform apply tfplan
+
