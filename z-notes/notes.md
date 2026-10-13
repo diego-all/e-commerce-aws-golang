@@ -2168,12 +2168,67 @@ Una nota: el nombre del bucket no se entiende con claridad en el audio, así que
 
 **PENDIENTE**
 
+**PENDIENTE**
+
+**PENDIENTE**
+
+**PENDIENTE**
+
+**PENDIENTE**
+
+**PENDIENTE**
+
+**PENDIENTE**
 
 
 ## Sección 10: Backend - Lambda Principal
 
 
-### 65. 
+### 65. Creamos la lambda principal del backend
+
+>Nota: Se usa IAC.
+
+Desde el archivo .tf se selecciona el path donde se encuentra y en el README esta el comando para actualizar y empaquetar la lambda.
+
+    GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -o bootstrap main.go
+
+    zip function.zip bootstrap
+
+
+Bueno, y comenzamos con el desarrollo más importante de todos, el backend de nuestro eCommerce.
+
+Lo que vamos a hacer es crear ya nuestra lambda, vamos a crear nuestra lambda desde cero, se va a llamar Gambit, obviamente, va a ser de Golang, así que vamos a elegir Go 1.0, vamos a cambiar el rol de ejecución, vamos a pedirle que nos podemos usar un rol existente, vamos a ver, o directamente, vamos a hacer que nos cree un rol, ok, con los permisos básicos de lambda, luego lo vamos a ir potenciando con los permisos. Muy bien, vamos a configuración avanzada, vamos a habilitar URL de función, esto es importante, ok, URL de función, vamos a configurar el uso compartido de recursos entre orígenes, vamos a habilitar el CORS y vamos a directamente crear la función.
+
+Bueno, una vez que está creada la función, vamos a editar aquí donde dice configuración del tiempo de ejecución, editar, recuerden que el controlador es main, main y vamos a guardar, ok. Muy bien, una vez que tenemos esto vamos a pegar una revisada a las configuraciones. Configuración general, recuerden que nosotros al ser Go lo editamos y le vamos a colocar una CPU de 128M, igualmente si utiliza 40M es mucho, en tiempo de espera lo podemos dejar en 15 segundos, no hay ningún problema y vamos a guardar, ok.
+
+Luego vamos a ver URL de función, aquí me habla de mi API, de mi API Gateway, luego vamos a verla, por ahora no vamos a hacer eso, lo vamos a hacer más adelante, tiene el CORS totalmente habilitado con asterisco y luego vamos a ir jugando con las variables de entorno que va a necesitar nuestro desarrollo. El desarrollo del backend es largo así que más de una vez vamos a entrar aquí a hacer ajustes, a cargar valores, a hacer cambios, así que simplemente por ahora con esto ya estamos, luego vamos a empezar a desarrollarlo y vamos a ir subiendo el código para probarlo, ok. Bueno nos vemos en el próximo capítulo y continuamos trabajando con el backend.
+
+
+necesito crear una lambda para el docente se llama gambit, en mi caso se llamar  
+con runtime golang.
+
+En mi caso creo que el archivo se llamara lambda_backend.tf 
+Arquitectura: x86_64
+Rol de ejecucion: Creacion de un nuevo rol desde la politica de AWS templates.
+
+Configuracion avanzada:
+Habilitar URL de funcion
+Configurar el USO compartido de recursos entre origenes (CORS)
+
+Crear la funcion.
+
+Luego se edita en corfiguracion del tiempo de ejecucion: (editar)
+
+Controlador = main
+
+Configuracion general
+
+Memoria = 128 MB
+almacenamiento efimero = 128 MB
+tiempo de espera = 0 a 15 min
+
+
+
 
 
 ### 66. 
