@@ -1886,6 +1886,18 @@ Una vez que ya tenemos la solicutud de integracion.
 ### 61. Cargando las reglas al bucket s3 
 
 
+Recordar que se tiene una dependencia:
+
+
+- RDS
+- Lambda(Codigo)
+- Cognito 
+- Secrets Manager - Parameter Store
+- API Gateway
+- Bucket S3 (Politica)
+
+
+
 
 
 
@@ -1899,19 +1911,84 @@ Una vez que ya tenemos la solicutud de integracion.
 ### 63. 
 
 
+URLs del Hosted UI
+
+Iniciar sesión (para obtener el token):
+
+https://summer-app-dev-unique.auth.us-east-1.amazoncognito.com/login?client_id=38h0d6file3a5hpqej1a7s2nm4&response_type=token&scope=openid+email&redirect_uri=https://localhost:3000
+
+Registrarse (crear un usuario nuevo):
+
+https://summer-app-dev-unique.auth.us-east-1.amazoncognito.com/signup?client_id=38h0d6file3a5hpqej1a7s2nm4&response_type=token&scope=openid+email&redirect_uri=https://localhost:3000
+
+
+Se obtiene el token desde la URL.
+
+
+https://localhost:3000/#id_token=eyJraWQiOiJBakZYRThPSGt5ZVJjZnZWL1hDVkt2eHFyN2pIY29hem8zV2tTemYrTnRZPSIsImFsZyI6IlJTMjU2In0.eyJhdF9oYXNoIjoiSHJIYkUyUmpuZU5kX19uM1JEUTRpUSIsInN1YiI6Ijg0Zjg1NGU4LWYwZDEtNzAwYy0xZmU2LWJkYmJiMWI2OTk1NiIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaXNzIjoiaHR0cHM6Ly9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbS91cy1lYXN0LTFfUUpaVkc0UlJxIiwiY29nbml0bzp1c2VybmFtZSI6Ijg0Zjg1NGU4LWYwZDEtNzAwYy0xZmU2LWJkYmJiMWI2OTk1NiIsImF1ZCI6IjM4aDBkNmZpbGUzYTVocHFlajFhN3Mybm00IiwiZXZlbnRfaWQiOiJiZDNmZWU5Ni01OGNkLTQ0ZjctODFkMS0zMTVjNjk3ZWE0MjEiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTc5MTg2NjM4NiwiZXhwIjoxNzkxOTUyNzg2LCJpYXQiOjE3OTE4NjYzODYsImp0aSI6IjQ3YTdkYTkwLWU0YTAtNGU3OS05MzkxLWU3MzZlYTE5ZGY1MSIsImVtYWlsIjoiZHBvc2FkYWxsYW5vQGdtYWlsLmNvbSJ9.gD1UZ4Ya60ouf2kKxdzJ2-3SZWlKInKq0iH4rklDs7XhHn4RO5NzNn1AVsD9_PIaopAuAL8E9gTcKGLp0bv3j8PWHFF-WPHvNmGOOV5FcPfoosiqxWGlimyUHU8LTOrAN61zSG7mPknDTA__DktVlRN4IKQa9cS9gBN4uCY7fWPegp5dKO5VJqC10BNn-g6iS97WOjApDrpp5KF39nxo-rMXR_0GZhfefhCkHk6iywrVo_YKuC0w3aRmMg0J7kyCHE5qFcNCK7F6jrULqEOOH000AvsgPy0pCNg1gPs_y36Rn0_Z9HnDjrXY_aLt7u0_UZuzYpMKOn19dOUkx5XWmQ&access_token=eyJraWQiOiIvMGw4T3o5cmgxY0IrR0tyZWMwallsaStBTzVOazRueWJsTm44MFZuOTRVPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI4NGY4NTRlOC1mMGQxLTcwMGMtMWZlNi1iZGJiYjFiNjk5NTYiLCJpc3MiOiJodHRwczovL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL3VzLWVhc3QtMV9RSlpWRzRSUnEiLCJ2ZXJzaW9uIjoyLCJjbGllbnRfaWQiOiIzOGgwZDZmaWxlM2E1aHBxZWoxYTdzMm5tNCIsImV2ZW50X2lkIjoiYmQzZmVlOTYtNThjZC00NGY3LTgxZDEtMzE1YzY5N2VhNDIxIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJvcGVuaWQgZW1haWwiLCJhdXRoX3RpbWUiOjE3OTE4NjYzODYsImV4cCI6MTc5MTk1Mjc4NiwiaWF0IjoxNzkxODY2Mzg2LCJqdGkiOiJhOGQ0YTllYi1lYTM4LTQwZDItYWQzOC0xNjYyNTcyODViNjUiLCJ1c2VybmFtZSI6Ijg0Zjg1NGU4LWYwZDEtNzAwYy0xZmU2LWJkYmJiMWI2OTk1NiJ9.fp4kUyheUeqrr8UPCybBj71-pXVRzaZgEOGrUHsQG_Q2CPsav9xs70_Cg8KSdOWOY63ZtxIARPqGL2gweQ1kGiQjSoygDt52rzx2V9Z41bGxZwsZGzQ1bUaESGQu6rp1Sw671VrpGWPpt7_vGVgybfpaNWUox3Q1SVcdDqd_dJRzbGwq5PTGn-pRUN7plcat4oVJeIrxVRQdhMHoIgyfU-I1R1NRVVOqYnwiLUSYrk2-UJmY8MkZqaWKrEPJfb0uS1QyDK5hhbdxMjmEjtoJKb4sqrOXZVP73vUvL8KmH6uqqW5D8-KQk_AnslPydWc0_HKr25FE7wA_T__VjFzqrQ&expires_in=86400&token_type=Bearer
+
+
+
+Para probar la Lambda con un usuario nuevo
+Abre la URL de registro y usa un alias de Gmail, por ejemplo dposadallano+test1@gmail.com, con una contraseña de 8 o más caracteres.
+Escribe el código de verificación que llega al correo.
+Revisa en MySQL: select * from users;
+
+
+
+dposadallano+test1@hotmail.com
+
+
+https://localhost:3000/#id_token=eyJraWQiOiJBakZYRThPSGt5ZVJjZnZWL1hDVkt2eHFyN2pIY29hem8zV2tTemYrTnRZPSIsImFsZyI6IlJTMjU2In0.eyJhdF9oYXNoIjoidWxRS1NyRkYzZktOM0xXS2lPQ0k3ZyIsInN1YiI6ImM0NTg0NDY4LTIwZjEtNzBmMi1kZjJjLTUxNDI2NDdiMDkyNCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczovL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL3VzLWVhc3QtMV9RSlpWRzRSUnEiLCJjb2duaXRvOnVzZXJuYW1lIjoiYzQ1ODQ0NjgtMjBmMS03MGYyLWRmMmMtNTE0MjY0N2IwOTI0IiwiYXVkIjoiMzhoMGQ2ZmlsZTNhNWhwcWVqMWE3czJubTQiLCJldmVudF9pZCI6IjgyY2Q5Mzc0LWY3NjctNDE3Mi05MjY4LTk2OWVhNmViYzE5ZCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNzkxODY5NjY0LCJleHAiOjE3OTE5NTYwNjQsImlhdCI6MTc5MTg2OTY2NCwianRpIjoiNDY1MWM2ZTctMThlMS00MDNhLWEyYzgtYjNhMWQwMjYwNWI4IiwiZW1haWwiOiJkcG9zYWRhbGxhbm8rdGVzdDFAaG90bWFpbC5jb20ifQ.AUyfJyqerSLKFAHQn01mB6oVGH0sNGRWvOPp9NWB3aU15u7zaJykI0OUlmC53Cl2o7CnMrloDOIS0BF_tGce2KQMkgBdN7YuYBjSfgx02-Q19ArJBDtETZTMbwwVdOMPQlzzY5W21kO2AEB_38zbBeG4lAaArx3KTTliV12mfW5PFlEdNZOZBFdrgjdcedqv-iOf7rMYAa-lkU32z8-gdOlMDIjEDJsh7Dp1GK9LRD3hB9ukRcq3AyahfNqKnFI6ur2-9MZTsikBxqJSsFwPSq6v2RnpX-k4kIBECz6oRo_Eu8MmB4x5Qy8R48M4_a-8jZcHM6Vh1-x0uT61KqBdMw&access_token=eyJraWQiOiIvMGw4T3o5cmgxY0IrR0tyZWMwallsaStBTzVOazRueWJsTm44MFZuOTRVPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjNDU4NDQ2OC0yMGYxLTcwZjItZGYyYy01MTQyNjQ3YjA5MjQiLCJpc3MiOiJodHRwczovL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL3VzLWVhc3QtMV9RSlpWRzRSUnEiLCJ2ZXJzaW9uIjoyLCJjbGllbnRfaWQiOiIzOGgwZDZmaWxlM2E1aHBxZWoxYTdzMm5tNCIsImV2ZW50X2lkIjoiODJjZDkzNzQtZjc2Ny00MTcyLTkyNjgtOTY5ZWE2ZWJjMTlkIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJvcGVuaWQgZW1haWwiLCJhdXRoX3RpbWUiOjE3OTE4Njk2NjQsImV4cCI6MTc5MTk1NjA2NCwiaWF0IjoxNzkxODY5NjY0LCJqdGkiOiI4NjAwMTY3ZS0zNTA0LTQyZTktOTI3My01NTdiNTA4YWFhZDAiLCJ1c2VybmFtZSI6ImM0NTg0NDY4LTIwZjEtNzBmMi1kZjJjLTUxNDI2NDdiMDkyNCJ9.sqjQNaHTcwG-oARDk-ZxD5ld8IO4HqKa2QJvo8jIUKHgBEPL-2zYdmZ-7AR4-Q6qd_s072B3L1ZRmtOjDAaTuVMCuTYZzmF5wEO5QzW6Epaxmv2zsqPp2uY4g4uHFi6gPjr76FNwyiRIFWJh5nmJrBoNI-WFOHhlVY-JzYiH21ZwBt-s14niSoUAfejm0TX52MmdiiVNbI6BU6jxTElsKVyqxZH74RiiEB627tAnUHCclRsDPd_ScZniRtpz2bHLohE6jRMGfM5hwmEsgiYKGU3pTaRfHMq8P7l7Mf-JAJl3sKzBTzxxVb8JeB-w9qTJgNkBg-gIRQH8SOFYhSLfww&expires_in=86400&token_type=Bearer
+
+
+{
+  "at_hash": "ulQKSrFF3fKN3LWKiOCI7g",
+  "sub": "c4584468-20f1-70f2-df2c-5142647b0924",
+  "email_verified": true,
+  "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_QJZVG4RRq",
+  "cognito:username": "c4584468-20f1-70f2-df2c-5142647b0924",
+  "aud": "38h0d6file3a5hpqej1a7s2nm4",
+  "event_id": "82cd9374-f767-4172-9268-969ea6ebc19d",
+  "token_use": "id",
+  "auth_time": 1791869664,
+  "exp": 1791956064,
+  "iat": 1791869664,
+  "jti": "4651c6e7-18e1-403a-a2c8-b3a1d02605b8",
+  "email": "dposadallano+test1@hotmail.com"
+}
+
+
+
+Hasta la primera firma. (o primer punto).
+
+
+
+se realizan 2 curlts para subir las imagenes al bucket.
+
+
+Paso 1. Crea una petición nueva en Postman. Cambia el método a PUT y pega esta URL:
+
+https://65ktuy96tk.execute-api.us-east-1.amazonaws.com/dev/summer-images-800445863816/diego.png
 
 
 
 
 
+Paso 1. Desde la terminal de root (donde está el perfil bold-free-tier), pídele a API Gateway los métodos de esa ruta:
 
 
-
-
-
-
-
-
+root@p3rseus:/home/diegoall/courses/e-commerce-aws-golang# aws apigateway get-resource --rest-api-id 65ktuy96tk --resource-id pp7nrq --region us-east-1 --no-cli-pager --profile bold-free-tier
+{
+    "id": "pp7nrq",
+    "parentId": "0zsomh",
+    "pathPart": "{object}",
+    "path": "/{folder}/{object}",
+    "resourceMethods": {
+        "OPTIONS": {},
+        "PUT": {}
+    }
+}
 
 
 

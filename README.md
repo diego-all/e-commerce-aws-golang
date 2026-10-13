@@ -1,5 +1,7 @@
 # E-Commerce - Golang + NextJS (AWS Cloud)
 
+dldb !!mfa
+
 
 
 ## Back-End
@@ -78,3 +80,34 @@ Y luego ejecutas: cdk deploy -a "python3 rds_mysql.py"
     cdk deploy -a "python3 rds_mysql.py" -o cdk_rds.out --profile bold-free-tier
 
     
+
+OPORTUNIDAD: 
+
+
+- tema de seguridad implicito con las politicas(bucket).
+
+
+        REGISTRO (una vez por usuario)
+        Hosted UI --> Cognito User Pool "summer"
+                            | al confirmar el correo (trigger Post Confirmation)
+                            v
+                    Lambda summerUser (Go)
+                            |-- lee credenciales --> Secrets Manager (SummerUserDbSecret)
+                            '-- INSERT en users ---> RDS MySQL "summer"
+                    (sus logs van a CloudWatch)
+
+        SUBIR IMAGEN
+        curl / Postman / Next.js --PUT + access_token--> API Gateway --> S3
+                                        autorizador Cognito valida el token (firma, expiración, scope openid)
+                                        API Gateway asume api_gateway_role (permiso s3:PutObject)
+
+        VER IMAGEN
+        Navegador --GET--> S3 directo (política pública del bucket, sin API Gateway ni login)
+
+
+    Puntos clave:
+
+Cognito guarda los usuarios y entrega tokens. El Hosted UI es su pantalla de login.
+API Gateway no ejecuta código. Valida el token y reenvía el PUT a S3, usando el segmento {folder} de la URL como nombre del bucket y {object} como nombre del archivo.
+La Lambda solo se ejecuta al confirmar un usuario, y copia su correo y su sub a MySQL.
+El Identity Pool y sus roles existen pero este flujo no los usa.
