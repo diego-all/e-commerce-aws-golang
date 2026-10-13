@@ -2,6 +2,42 @@
 
 
 
+## Back-End
+
+### Lenguaje y Entorno de Desarrollo
+* **Golang**: Lenguaje principal (Curso básico inicial)
+* **Visual Studio Code**: Editor de código
+* **GitHub**: Control de versiones y repositorio
+
+### Bases de Datos y Herramientas de Desarrollo
+* **HeidiSQL**: Cliente de gestión de bases de datos
+* **Postman**: Pruebas y documentación de APIs
+
+### Servicios en la Nube (AWS)
+* **AWS RDS**: Servicio de bases de datos relacionales
+* **AWS IAM**: Gestión de roles y permisos de acceso
+* **AWS Cognito**: Autenticación y gestión de usuarios
+* **AWS Lambda**: Computación serverless
+* **AWS S3**: Almacenamiento de archivos y objetos
+* **AWS CloudWatch**: Monitoreo y registro de logs
+* **AWS API Gateway**: Exposición y gestión de APIs públicas
+* **AWS Secrets Manager**: Almacenamiento seguro de credenciales y secretos
+
+---
+
+## Front-End
+
+### Framework y Entorno
+* **Next.js**: Framework de React para el desarrollo web
+
+### Herramientas de Pruebas
+* **Insomnia**: Cliente para pruebas de APIs
+
+### Despliegue e Infraestructura
+* **Netlify**: Plataforma de alojamiento y despliegue continuo
+
+
+
 AYUDA MEMORIA DE MIS FAVORITOS (APPS DE AWS EN LA PARTE SUPERIOR)
 
 

@@ -1482,24 +1482,6 @@ Se le da click en agregar
 **Ahora ya aparece el desencadenador en la lambda**
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### 55. Probamos la solución completa
 
 
@@ -1596,6 +1578,9 @@ Economizar dinero en infra de nube. un api gateway para todos solo agregar una r
 
 ## Sección 9: API Gateway directo a s3 para alojar imagenes
 
+
+### 56. Creando nuestro Bucket s3
+
 Aprender a crear un API Gateway directo a S3.
 
 
@@ -1613,6 +1598,305 @@ Simple Storage Service (s3)
 Crean un bucket desde la consola web.
 
 
+Todos los objetos de este bucket son propiedad de esta cuenta, el acceso a este bucket y sus objetos se especifica a traves de politicas. 
+
+Bloquear todo el acceso publico (Viene apagado por default) se remueve el check. por que no quiero bloquear nada, 
+por que?
+Mi front tiene que acceder al bucket para acceder a las imagenes. Si nosotros lo bloqueamos no va a poder acceder a las imagenes.
+
+- Reconozco que la configuracion actual puede provocar  que este bucket y los objetos que contiene se vuelvan publicos.
+**Se debe confirmar por que es un tema de seguridad**
+
+
+Control de versiones del bucket, se va a dejar desactivado.
+
+
+Si se desean se pueden colocar etiquetas, pero no es necesario.
+
+Cifrado predeterminado (dejamos todo como esta)
+
+Tipo de Clave de cifrado
+- Claves administradas por Amazon S3 (SSE-S3)
+
+Claves de Bucket
+Habilitar
+
+
+Configuiracion avanzada
+
+BLoqueo de objetos
+Desactivar
+
+
+El nombre del bucket debe ser un nombre unico para toda la region.
+
+summer-images**
+
+
+### 57. Creando el Rol de IAM necesario con todos los permisos.
+
+Solucion para ir directamente a un S3 a traves de un API GAteway,  vamos a ver la confiuracion del rol de IAM que vamos a necesitar.
+
+No se va a obtener el metodo GET para obtener las imagenes.  No hace falta, vamos a ir desde front directamente a la URL a obtener las imagenes, como nuestro Bucket es publico,  las imagenes se van a poder mostrar sin problemas. 
+|
+Tenemos que crear un rol para que soporte todo el trabajo de API Gateway, 
+
+Ademas luego se le va a dar un permiso para que pueda acceder a cognito.
+
+Vamos a IAM, al menu de riles y se va a crear un nuevo rol.
+
+Es un rol del servicio de Amazon, 
+
+**Nota: No elegir s3, elegir directamente el servicio API GATEWAY.**
+
+Para que me permite 
+
+
+Una vez que estamos dentro, vamos a hacer click en añadir permisos 
+Por ahora solo tiene permiso para cloudwatch.
+
+En añadir poermisos se selecciona, crear politica insertada.
+ 
+Y aca lo que vamos a hacer es ir eligiendo los servicios , y se selecciona el servicio de s3.
+
+Una vez que se hace click en s3 se pueden filtrar las acciones, se escoge el putObject 
+
+Se elige este Permiso exclusivamente, por que sino vamos a crear una policy enorme, por todos los permisos que tiene s3.
+
+y vamos a elegitr el servicio de s3 la accion de GetObject.
+
+Object  Cualquier Recurso de tipo = Object   [Cualquiera] 
+
+
+
+Cualquier recurso va a poder acceder con esta politica a leer y a grabar objetos dentro del object
+
+Se crea la politica con el nombre de summer_s3
+
+E inmediatamente  le adiciona ese nombre de politica que es s3.
+
+
+Ahora vamos a hacer lo propio pero con cognito. por que tiene una autenticacion con Cognito y se lo tenemos que añadir. 
+
+Lo mismo, añadir permisos, crear politica insertada , se elige el servicio que es cognito identity,  
+
+y se selecciona lo siguiente: 
+
+(Acciones manuales)
+
+hablitar el checkbox en : Todas las acciones de Cognito identity (cognito-identity:*)
+
+- Enumeracion
+- lectura
+- Etiquetado
+- Escritura
+
+y se habilita el check en (Cualquiera de esta cuenta) "puede usar esto"
+
+**Sirve para cualquiera de los grupos de usuario que tengo en cognito**
+
+Se crea la politica bajo el nombre de summerCognito
+
+Si nosotros queremos hilar mas fino, y colocarle diurectamente rl eecurso. y que solamente estas API gateway pueda grabar en el bucket que han creado se puede editar en "resource" y remover los asteristcosy colocar el bucketr especifico.
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::*/*"
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::*/*"
+    }
+  ]
+}
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-identity:GetId",
+        "cognito-identity:SetPrincipalTagAttributeMap",
+        "cognito-identity:SetIdentityPoolRoles",
+        "cognito-identity:ListIdentityPools",
+        "cognito-identity:CreateIdentityPool",
+        "cognito-identity:UnlinkIdentity",
+        "cognito-identity:DeleteIdentities",
+        "cognito-identity:GetOpenIdToken",
+        "cognito-identity:DescribeIdentity",
+        "cognito-identity:GetCredentialsForIdentity"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": "cognito-identity:*",
+      "Resource": "arn:aws:cognito-identity".*:132694511939:identitypool/*"
+    }
+  ]
+}
+
+
+Ahora a configurar del lado del API Gateway donde vamos añadir este rol para que tenga todos los permisos.
+
+
+### 58. Link de instrucciones detalladas de AWS 
+
+Link de Instrucciones detalladas de AWS
+
+El link siguiente contiene todas las instrucciones Paso a Paso para configurar una API GATEWAY para que envíe objetos a un bucket S3
+
+    https://repost.aws/knowledge-center/api-gateway-upload-image-s3
+
+
+### 59. Creando API Gateway de tipo REST
+
+Ahora vamos a crear nuestor API Gateway, ya tenemos el rol.
+
+Se crea una API.
+Dentro de todas las posibilidades que me da se va a escoger una API REST.
+
+>Para la ultima parte del backend se va a crear una API HTTP. Pero lo hacemos directamente desde la lambda, y luego la vamos a ir configurando. 
+
+Esta API nueva se va a llamar SummerS3
+Va a ser de tipo REST y va a ser una API Nueva.
+
+Ahora se pueden ir configurando los metodos, los endpoints, vendrian a ser las rutas. Lo primero que se va a hacer es a la direccion / de nuestra API.
+se le va a crear un recurso. Se va a llamar {folder}
+
+El folder va a ser el nombre del bucket y luego viene el {object} que va a ser en si mismo el archivo que vamos a ir subiendo.
+Se habilita API Gateway CORS (Enabled) y se crea el recurso.
+
+Dentro de folders, se va a crear otro recurso por debajo de {folder} y este va a ser el {object} y se va a llamar object tambien. Se deben colocar las llaves por que enr ealidad son tags.
+Se habilita API Gateway CORS (Enabled) y se crea el recurso.
+
+Una vez que se tienen creados estos 2 recursos, lo que se va ahacer debajo de Object se va a crear un metodo, que seria PUT. POr que ya el bucket existe.
+
+La configuracion de ese PUT va a ser:
+Tipo de integracion: Servicio de AWS
+
+Region: us-east-1
+
+Servicio de AWS: Simple Storage Service (S3)
+
+Subdominio de AWS: (Vacio)
+
+Metodo HTTP: PUT
+
+Tipo de acción: usar sustitución de ruta
+
+Por que como estamos usando tags, que es {folder} y {object}. Lo que va a hacer es una sustitucion,  
+
+Por ejemplos se va a enviar un nombre de folder que es el que se tiene creado en el bucket S3. EN object vamos a enviar un archivo, por ejemplo cualquiercosa.jpg, y en el nombre de usuario va a ir todo el nombre de usuario.jpg 
+
+Sustitución de ruta (opcional): {bucket}/{key}
+
+Rol de ejecucion: [Se coloca el ARN del rol de ejecucion]
+
+Tratamiento de contenido: Paso a través
+
+usar tiempo de espera predeterminado: Enabled
+
+Y ya arma todo el esquema.
+
+
+Ahora entran a autorizadores, se va a llamar Cognito.
+
+Tipo: Cognito
+
+Grupo de Usuarios: [El que se creo en los templates de terraform]
+
+Origen del token: Authorization
+
+POr que va a venir en el header, 
+
+Validacion de token: (Se deja vacio)
+
+Y listo ya se tiene el autorizador.
+
+Para solicitud de metodo. de /{folder}/{object} - PUT - Ejecucion de metodo
+En autorizacion se elige: Cognito
+
+Validador de solicitudes: Ninguno
+
+Clave de API obligatoria false
+
+Una vez que se confirma solicita el ambito de OAuth.
+
+Ambitos de OAuth: openid
+
+Si se deja en ninguno no va a funcionar.
+
+
+Ahora se clickea en solicitud de integracion.
+
+En parametros de ruta se va a tener que modificar:
+Se van a agregar las rutas que son necesarias.
+
+Nombre: bucket
+Mapeado de: method.request.path.folder
+
+Se va a agregar la segunda rutra que es la key:
+
+Nombre: key
+Mapeado de: method.request.path.object
+
+Ya se tienen las dos rutas agregadas que es lo que nos interesa.
+POr que tiene que ir mapeando y tiene que ir descifrando.
+Recordar que aca no hay una lambda debajo, entonces todo es por configuracion,
+por eso es tan complejo.
+
+Una vez que ya tenemos la solicutud de integracion.
+
+
+
+### 60. Reglas de Politica al Bucket
+
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::gambit2-images",
+                    "arn:aws:s3:::gambit2-images/*"
+                ]
+            }
+        ]
+    }
+
+
+### 61. Cargando las reglas al bucket s3 
+
+
+
+
+
+
+### 62. 
+
+
+
+
+
+### 63. 
 
 
 
@@ -1628,9 +1912,60 @@ Crean un bucket desde la consola web.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 60. Reglas de Politica al Bucket S3
+
+
+### 61. Cargando las reglas al bucket S3
+
+
+### 62. Asignando aws.cognito.sigin.user.admin 
+
+
+### 63. Ultimos ajustes en CORS para el metodo PUT
+
+
+
+### 64. Probando la solucioon desde POSTMAN
 
 
 ## Sección 10: Backend - Lambda Principal
+
+
+### 65. 
+
+
+### 66. 
 
 
 ## Sección 11: Backend - Categorias

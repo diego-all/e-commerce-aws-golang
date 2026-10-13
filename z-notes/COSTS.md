@@ -26,3 +26,6 @@ $ 0.05 por 10000 llamadas a la API
 
 Se tiene un periodo de prueba de 30 dias disponible.
 
+
+
+
