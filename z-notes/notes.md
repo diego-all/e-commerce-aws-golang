@@ -2229,15 +2229,295 @@ tiempo de espera = 0 a 15 min
 
 
 
+### 66. Configuramos el API Gateway
+
+Bueno, una vez creada la lambda, una vez habilitada la URL de la lambda, lo que vamos a hacer es crear la API Gateway para que se conecte a esa URL de la lambda.
+
+Vamos a venir aquí a crear API, vamos a decirle que es de tipo HTTP, fíjense que aquí dice que funciona con lambda, backends, demás. Vamos a crear, vamos a agregar una integración y la integración va a ser de tipo lambda, ok. Tenemos que buscar ahora nuestra lambda y la lambda va a ser gambit, esta que habíamos creado aquí. Muy bien, versión, lo dejamos como está, puede ser la versión 2, vamos a ver que dice, la versión 2 dice recomendado, utilíselo con nuevas funciones lambda en un formato fácil de usar. Y la versión 1 nos dice que la tenemos que utilizar con lambdas creadas para las API REST. En este caso no, vamos a usar la versión 2 porque nuestra lambda va a ser de tipo HTTP. El nombre de la API, aquí vamos a colocar gambit, vamos a darle siguiente y aquí directamente vamos a crear una ruta predeterminada, no me interesa ahora configurar esto porque lo vamos a cambiar y a configurar después. Le damos siguiente, en la etapa default vamos a eliminarla, no me interesa la etapa default, vamos a darle siguiente. Confirmamos los valores y le damos crear.
+
+Una vez que tenemos creada nuestra API Gateway, vamos a venir aquí a rutas y vamos a ver que tenemos ya una mínima ruta creada. Vamos a ver en CORS que tengamos todo, vamos a configurar CORS de la API Gateway también, no solo hace falta la lambda sino la API Gateway, a todo le ponemos asterisco y hacemos click en los botones agregar. Vamos a los cuatro lugares, en este también asterisco vamos a guardar y listo, ahí ya tenemos nuestros CORS configurados.
+
+Recuerden, luego vamos a tener que ir armando el árbol de cada una de las rutas, a medida que vamos desarrollando la lambda, lo vamos a ir haciendo, luego tenemos toda la parte de autorización. Bueno, una vez que configuramos esto mínimo ya vamos al próximo capítulo. Esto lo vamos a ir armando, de a poco le vamos a ir agregando los autorizadores, vamos a hacer las integraciones, no se preocupen, pero esto va de a poco, así que básico para comenzar, ya estamos listos para ir al próximo capítulo y ahora nos vamos a crear el repositorio en GitHub de Gambit.
 
 
-### 66. 
+Ahora se debe confguirar el API gateway. Una veez creada la lambda y habilitada la URL.
+Para que se conecte a esa URL de la lambda.
+
+Tengo una duda, se debe utilizar el mismo API Gateway que ya se implemento? o se debe crear uno nuevo?
+
+Va a ser de tipo HTTP 
+Se va a agregar una integracion, y va a ser de tipo Lambda.
+Se debe buscar la lambda y esta va a ser la que se creo anteriormente en (lambda_backend.tf)
+version 2.0 recomendado : utilicelo con nuevas funciones lambda con un formato acil de usar.
+(Por que nuestra lambda va a ser de tipo HTTP)
+
+Nombre API: lambda_backend
+
+Crear una ruta predeterminada: 
+
+Configurar etapas: (La etapa default se elimina, no interesa)
+
+Una vez se tiene creada la API gateway en el menu de rutas:
+Se va a tener una minima ruta creada.
+Se configura CORS del API Gateway tambien, se colocan los asteriscos segun la imagen.
+
+Luego vamos a tener que ir armando el arbol, a medida que se vaya desarrollando la lambda.
+
+
+Esto se va a ir armando de a poco, luego se van agregando los autorizadores, 
+
+Segun estas frases finales creo que se debe crear unn API Gateway nuevo, que opinas?
+
+
+
+**Sí, hay que crear un API Gateway nuevo**
+
+- Es otro tipo de API. El que ya tienes (SummerS3) es una API REST, y la de la lección 66 es una API HTTP (API Gateway v2). El tipo se elige al crearla y no se puede cambiar después, así que no se pueden mezclar en una sola.
+- Cumplen trabajos distintos. La REST conecta directo a S3 (subir imágenes con PUT). La HTTP será la puerta del backend, la que lleva a la Lambda.
+- Conviven sin problema. Tu Next.js hablará con dos URLs base: la de la REST para imágenes y la de la HTTP para el resto.
+
+
+pablo tiene
+
+GambitUser
+Gambit
+
+lambda_secret
+lambda_backend
+
+
+
+
+### 67.
+
+
+### 68.
+
+
+
+
+### 69.
+
+
+
+### 70.
+
+
+
+### 71. Configuramos Authorizer y Entornos en mi API Gateway
+
+Bueno, vamos a seguir trabajando del lado de la API Gateway para vamos a ir mechando cosas en código con Go, cosas en Amazon. Lo que vamos a hacer ahora es crearnos el autorizador.
+El módulo que va a hacer en nuestra API Gateway va a ir contra Cognito y va a validar el token que nosotros vamos a enviar en el header de nuestras rutas.
+Entonces, vamos a ir a autorizar aquí y vamos a hacer clic en administrar autorizadores.
+Todavía no tenemos ninguno.
+Yo aquí clic aquí y solamente tiene IAM, pero no tiene Cognito.
+Así que vamos a administrar autorizadores, vamos a crear.
+Lo vamos a llamar Gambit Cognito.
+Ahí va un nombre cualquiera, lo dejamos como un tipo JSON Web Token.
+No va a ser por Lambda, sino que va a ser directo contra la API de Cognito.
+Origen de identidad, queda igual.
+Request Header Authorization significa que por el Request dentro del Header va a venir el campo Authorization.
+Y ahora viene la URL del emisor y la URL del emisor siempre tiene la misma estructura.
+Empieza con Cognito IDP, lo vamos a escribir aquí.
+Empieza así, luego sigue con la región.
+Aquí vamos a colocarle USIS-1.
+Luego con un punto sigue con Amazon.
+Yo lo estoy copiando y pegando para no tener que escribir tanto.
+Esta es la primera parte de la URL.
+Todos los autorizadores de toda la SAPI Gateway, de todo el mundo van contra esto.
+Obviamente dependiendo de la región que estén.
+Las que están en otra región aquí cambiarán.
+Este es el único dato variable aquí.
+El resto es todo igual.
+Y lo que nos pide ahora es la región de nuestro pool IDP, de nuestro grupo de usuarios.
+Vamos a venir a Cognito, vamos a ir a nuestro grupo de usuarios.
+Igual no hacía falta porque ahí me lo mostraba.
+Y aquí tenemos el ID del grupo de usuarios.
+USIS-1 y en bajo, esto lo vamos a copiar.
+Vamos a venir al API y lo vamos a pegar al final de toda la URL.
+Ahí estamos personalizando la URL del emisor a nuestro propio grupo Gambit.
+Vamos a agregar público, la audiencia.
+Y ese público es nuestra aplicación de Cognito.
+Aquí lo que vamos a colocar es la ID de la aplicación de Cognito.
+Lo que tenemos que hacer es ir a Gambit, aquí, a nuestro grupo de usuarios.
+Vamos a ir a la pestaña que dice integración de aplicaciones.
+Y debajo de todo tenemos nuestro ID de cliente.
+Esto es lo que nosotros tenemos que copiar.
+Vamos a ir a la API Gateway y lo vamos a agregar como público.
+Esos son los valores que nosotros necesitamos.
+Le damos clic en crear y ya tenemos nuestros dos autorizadores.
+Vamos a usar solamente Gambit Cognito.
+Y aquí tenemos el resumen.
+Aquí tenemos nuestro público asociado, o sea la audiencia, que va a ser nuestra aplicación de Cognito.
+Y aquí tenemos la URL por la cual tiene que validar.
+Con esto solamente ya estamos en condiciones de autorizar el token que llegue en las peticiones.
+Se va a fijar que el token sea válido, que esté en fecha, que no está expirado y que pertenezca al user pool ID que nosotros tenemos implementados.
+Vamos ahora a integraciones, nosotros ya tenemos integraciones que es una Lambda.
+Nuestra Lambda Gambit es lo que nosotros hemos integrado y es donde nosotros vamos a cada ruta a decirle que va a estar integrado con esta Lambda.
+Nosotros ya tenemos el tema del course y ahora vamos a ver el tema de los stage, de los deploy.
+Las es las etapas.
+Ok, vamos a crear una etapa. Recuerden que cuando creamos nuestro grupo de...
+Nuestra PigEdWay venía una etapa que era default, pero a mí me gusta borrarlo y crear la propia nuestra.
+A esta etapa la vamos a llamar Gambit, ok?
+Puede haber una descripción.
+Vamos a habilitar la implementación automática para que no estemos constantemente en esta etapa que estamos desarrollando y que no está en producción, no hay problema.
+Básicamente, cuando hagamos cambios de ruta que se habilite automáticamente y se implemente de manera automática la APIS.
+Así no se evita mucha carga.
+Variables de etapa no vamos a crear y etiquetas tampoco, así que vamos a crear esta etapa, ok?
+La etapa de Gambit.
+Bueno, muy bien.
+Ya estamos en condiciones de ir al capítulo siguiente, seguir trabajando del lado de Go, y nos ha quedado todo directamente como para empezar a crear rutas y vamos a ya tener la posibilidad de asociar esas rutas y configurar la integración.
+Así que vamos al próximo capítulo y ya nos metemos de lleno con trabajar con nuestra función manejadores a meterle el procesamiento de JSON WebToken y lo vamos a dejar listo ya al finalizar esta sección como para en la sección siguiente empezar a crear ya las rutas directamente porque vamos a tener todo el código que va debajo desarrollado.
+Nos vemos en el próximo capítulo.
+
+
+
+
+
+
+Ahora vamos a crear el autorizador. el modulo que va a hacer en nuestra API Gateway, va a ir contra cognito y va a validar el token que nosotros vamos a enviar en el header de nuestras rutas.
+
+En APi Gateway, menu autorization, vamos a hacer click en el menu autorizadores. > administrar autorizadores
+
+> crear autorizador de tipo JWT
+
+El docente lo llama gambit_cognito, mi proyecto se llama summer.
+
+origen de identidad = queda igual
+
+URL del emisor = https://cognito-idp.us-east-1.amazonaws.com/{grupoGambit}
+
+EN amazon cognito aparece el id del grupo de usuarios
+
+Agregar publico = Id de la aplicacion de cognito
+
+Se tome de cognito de la pesta{a de integracion de aplicaciones, donde esta el DI de cliente.
+
+Le damos click en crear y ya tenemos los dos autorizadores.
+
+(Solo se va a usar gambit-cognito)
+
+
+Ahora se crea el stages. En este caso se va a llamar summer 
+
+Se va a habilitar la implementacion automatica (por ahora sirve ya que no estamos en produccion)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### 72.
+
+
 
 
 ## Sección 11: Backend - Categorias
 
 
+### 73.
+
+
+
+
+### 74.
+
+
+
+
+
+### 75.
+
+
+
+
+### 76. INSERT Category - Probando la solución con POSTMAN
+
+
+
+Ya está funcionando. Desde Postman le pega una API Gateway que está enlazada con Secrets Manager, me trae el secreto, tiene una validación del token contra Cognito y eso hace que después yo me conecte a la base de datos con MySQL a una base de datos que está en el servicio de RDS e inserte un registro. Todo eso hemos hecho en este Endpoint. ¿Se entiende?
+
+Y ahora va a ser todo así, todo va a ser: Primero grabamos Routers, luego grabamos BD, luego subimos la Lambda y la probamos con Postman. A partir de ahora yo ya no menciono más el token. Ustedes tienen la obligación de ir actualizando el token porque si no les va a dar error de autorización. Así que nos vamos al próximo capítulo.
+
+
+
+### 77. 
+
+
+
+
+
+### 78.
+
+
+
+
+
+### 79.
+
+
+
+
+### 80.
+
+
+
+
+
+### 81.
+
+
+
+
+
+
+### 82.
+
+
+
+
+
+### 83.
+
+
+
+
+### 84.
+
+
+
+
+
+### 85.
+
+
+
+
+
+### 86.
+
+
+
+
 ## Sección 12: Backend - Productos
+
+
+
+### 87.
+
+
+
+### 88.
+
+
 
 
 ## Sección 13: Backend Usuarios
