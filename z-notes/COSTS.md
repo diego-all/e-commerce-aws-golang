@@ -28,4 +28,13 @@ Se tiene un periodo de prueba de 30 dias disponible.
 
 
 
+Lo que muestran tus capturas
+
+
+El grueso del costo no es la instancia. La anomalía de $1.44 en RDS tiene como usage type ExtendedSupport:Yr1-Yr2:MySQL8.0, y $1.30 de esos $1.44 vienen de ahí. Es el cargo de Extended Support por usar MySQL 8.0, que ya salió del soporte estándar. Si creas la instancia con MySQL 8.4, ese cargo desaparece.
+RDS no está en tu Free Tier. La pantalla de Free Tier lista 6 servicios (KMS, Glue, CloudWatch, Lambda) y al filtrar rds o aurora no aparece nada. Tampoco tienes créditos ($0.00). EC2 tampoco aparece en esa lista, así que no asumas que una instancia EC2 sería gratis.
+Los $0.03 de VPC probablemente son IPv4 públicas, que AWS cobra por hora.
+
+
+
 

@@ -2449,60 +2449,86 @@ Y ahora va a ser todo así, todo va a ser: Primero grabamos Routers, luego graba
 
 
 
-### 77. 
+### 77. Update Category - Router
+
+
+Bueno, y vamos a hacer el Update de Categoría, ya mucha explicación va a quedar afuera, por lo cual vamos a ir más rápido y lo que tenemos que hacer es ahora comenzamos con Routers, siempre va a ser primeros Routers y luego base de datos. Vamos a Routers, vamos a crear una función que va a ser Update Category, que va a recibir un body y va a ser de tipo String, va a recibir el user de tipo String y va a recibir el ID de tipo entero, porque cuál es la diferencia, ahora yo voy a tener que tener el ID de la categoría que voy a modificar, antes el ID no interesaba porque solamente hacía un insert, el campo ID era auto increment, pero ahora si tengo que modificar tengo que saber cuál es el ID de la categoría, esto va a devolver un tipo entero y un tipo String y vamos a abrir la función, vamos a levantar un poquito aquí, vamos a reducir un poco esto, así trabajamos, lo mismo, vamos a hacer un bar de Models.Category, igual que en el ejemplo anterior, vamos a hacer un Unmarshal de una cadena de Bytes, de body, esto hasta les diría los buen copiar y lo pegan del endpoint anterior. Lo mismo, si error es distinto en el, vamos a hacer un Return 400 que diga error en los datos recibidos, todo lo mismo, R punto error, todo lo mismo, muy bien. Ahora vamos a preguntar lo mismo que antes, si Len de CategName es igual a 0 y además si Len de CategPath es igual a 0 y vamos a decir que Return 400 debe especificar CategName y CategPath para actualizar, para diferenciar el mensaje del insert. Bueno, para lo mismo si es admin, lo que vamos a hacer es, nos vamos a par de tiempo copiando, escribiendo, hacemos copy de toda esta parte y lo pegamos aquí, muy bien. Y ahora vamos a usar la opción de, ahora lo que tenemos que hacer, como nosotros vamos a pasarle a la base de datos, a la opción de base de datos, todo el modelo de Category, fíjense que a mí el ID me viene por afuera, no me viene como un modelo de Category, así que lo que vamos a hacer es a T punto, Categ ID le vamos a pasar el ID, ya estamos completando nuestra estructura, ya tiene CategName, CategPath y ahora le he configurado el Categ ID y ahora sí, vamos a decir, vamos a hacer un R2 y vamos a decirle que en base de datos que todavía no lo hemos creado, vamos a llamarlo Update Category y le vamos a pasar T igual que antes, ok. Aquí vamos a preguntar si R2 es distinto en el y vamos a hacer un retorno, 400 ocurrió un error al intentar realizar el Update de la Categoría. ¿De qué Categoría? Bueno, vamos a colocar el strconv Itoa de entero a alfanumérico del campo T punto CategID, puede ser CategID o le podemos poner ID directamente, ya nos viene arriba, más le vamos a poner un signo así mayor y vamos a colocar el error, bueno muy bien, luego si anduvo bien, obviamente vamos a tener que devolver un 200, retorno 200, Update, ok, y terminó, ya está este capítulo, miren qué rápido que fue y así va a ser, vamos a hacerlos rápidos porque si no va a ser un aburrimiento total. El próximo capítulo hacemos la parte de base de datos, cambiamos nuestro, en nuestro handler configuramos una ruta más, un método más y vamos luego a modificar las rutas en la API Gateway, a incorporar esta y a probar en Postman, así que nos vemos en el próximo capítulo.
 
 
 
 
 
-### 78.
+### 78. Update Category - BD
+
+Codigo
 
 
 
 
-
-### 79.
-
+### 79. Update Category - Subiendo Lambda y configurando ruta en API Gateway
 
 
+Bueno y una vez que tenemos la lambda ya compilada y funcionando vamos a cargar desde nuestra lambda nuestra función gambit vamos a cargar el sipeado vamos a seleccionar el sipe vamos a darle abrir y guardar esto se va a ir repitiendo así que directamente en capítulos posteriores lo que voy a decir es suban el sipeado es esto nada más es entrar en código en la solapa código cargar el sipeado y ya les tiene que aparecer en verde así no estamos grabando siempre lo mismo lo que sí vamos a hacer es ir a nuestra API Gateway y aquí vamos a crear la ruta nueva con una particularidad vamos a hacer un create va a ser gambit aquí hay que colocar todo el pat completo no barra gambit no el no el pat con la etapa la etapa ya la tiene el stage así que no no hace falta pero si el barra gambit barra categoría y aquí hay una particularidad porque la categoría yo la voy a recibir en la url en la id de categoría aquí vamos a colocar cuando recibamos un put y recibamos un delete en la id de la categoría no va a venir como parámetro en ningún Jason ni nada sino que va a venir directamente en la url como parámetro de url el pat parámetro se aguardan esto de que nosotros aquí nosotros en handlers estamos procesando el pat parámetros aquí este id es el que va a venir por la url como se configura eso en la piedue en la piedue se coloca el parámetro en este caso va a ser id pero se coloca entre llaves de esta manera yo le estoy indicando a la piedue que luego del categor y va a venir un barra y va a venir un parámetro para que para que no me dé error de ruta cuando yo desde postman envíe el id directamente en la url la piedue lo reconozca como que es un parámetro válido y no lo rechace vamos a hacer clic en crear y van a ver cómo me arma la ruta me arma categor y con el post y luego tiene un barra bella y dir con el post si yo vengo aquí voy a tener que también asociar un autorizador entramos aquí en la opción de autorización en el post voy a seleccionar gambit cognito hacemos clic en asociar autorizador y ahora vamos a integración y tenemos que seleccionar la lambda de gambit esto va a ser repetitivo en todos los capítulos salvo en dos métodos de el get de productos y el get de categorías que van a ser los únicos que no van a tener autorizador pero para el resto va a ser lo mismo entonces en esos casos yo voy a decirles bueno vayan a la piedue creen la ruta de paso lo van practicando creen la ruta coloquen en el autorizador y la integración y luego lo vamos a probar en postman de esa manera vamos a ahorrar mucho tiempo en el curso porque no vamos a grabar son muchísimos en points son muchos realmente son no menos de 30 a 40 en points entonces no vamos a estar en todos los capítulos repitiendo así que bueno ya saben cuando tengan que crear una ruta van a rutas van a create y copian que ustedes ya tienen aquí una base van creando el resto igual yo en algunos capítulos lo voy a hacer para apuntalar así que bueno nos vamos al próximo capítulo y ya nos ponemos a probar esto en postman.
 
-### 80.
-
-
-
-
-
-### 81.
 
 
 
 
 
 
-### 82.
+### 80. Update Category - Probando la solución con Postman
 
 
 
 
 
-### 83.
-
-
-
-
-### 84.
-
-
-
-
-
-### 85.
+### 81. Delete Category - Router
+ 
 
 
 
 
 
-### 86.
+### 82. Delete Cateegory -BD
+
+
+
+
+
+### 83. Delete Category - Probando la solución
+
+
+
+
+### 84. Select Category - Router 
+
+
+
+
+
+### 85. Select Category - BD
+
+
+
+
+
+### 86. Select Category - Probando la Solución Postman
+
+
+
+{{ruta}}/category
+
+
+Sin  la barra al final
+
+
+
+
+NO COMPRENDI EL TEMA DEL SLUG PERO ESTA FUNCIONANDO
+
+    {{ruta}}/category?slug=juguete
+
+
 
 
 
